@@ -21,15 +21,14 @@
 package controler;
 
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UIManager.LookAndFeelInfo;
 
+import util.GUIHandler;
 import view.MainWindow;
 
 
 public class Main {
 	
-	public static final String APP_VERSION="0.9.3.1 Beta",
+	public static final String APP_VERSION="0.9.4 Beta",
 			APP_ABOUT_TEXT="AvocaDOOM - a simple manager for Doom engines.\n",
 			APP_LICENCE =   "Copyright (C) 2012 Carlos F. M. Faruolo (aka Hydren)\nE-mail: 5carlosfelipe5@gmail.com\n\n" +
 							"Doom graphics (C) Id Software - Buttons \n" +
@@ -51,25 +50,14 @@ public class Main {
 	 */
 	public static void main(String[] args) 
 	{	
-		Settings jo = new Settings();
-		if(jo.useOSLF) try //TO FORCE TO USE THE SYSTEM LOOK & FEEL 
+		Settings settings = new Settings();
+		if(settings.useOSLF) try //TO FORCE TO USE THE SYSTEM LOOK & FEEL 
 		{
-			if(System.getProperty("os.name").equalsIgnoreCase("Linux"))
-			{
-				for(LookAndFeelInfo lfi : UIManager.getInstalledLookAndFeels())
-				{
-					if(lfi.getName().equalsIgnoreCase("GTK+"))
-					{
-						UIManager.setLookAndFeel(lfi.getClassName());
-						break;
-					}
-				}
-			}
-			else UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			GUIHandler.attemptToUseOSLookAndFeel();
 		} catch (Exception e) 
 		{
 			JOptionPane.showMessageDialog(null, "Could not change application look and feel. Using a cross-platform one...");
 		}
-		new MainWindow( jo );
+		new MainWindow( settings );
 	}
 }
