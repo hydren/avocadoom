@@ -50,7 +50,7 @@ import model.EngineInfo;
 import model.Mod;
 import model.Preset;
 import controler.FileAlreadyExistsException;
-import controler.JaggeryOptions;
+import controler.Settings;
 
 public class PresetDialog extends JDialog implements ActionListener
 {
@@ -66,7 +66,7 @@ public class PresetDialog extends JDialog implements ActionListener
 	
 	Vector<Mod> addedFiles;
 	Vector<String> engines;
-	JaggeryOptions options;
+	Settings options;
 	private JLabel lblPresetFileName;
 	private JTextField textFieldFileNamePreset;
 	private JTextField txtPresetname;
@@ -81,7 +81,7 @@ public class PresetDialog extends JDialog implements ActionListener
 	
 	private Vector<JCheckBox> customEnginesCheckBoxes;
 	
-	public PresetDialog(JaggeryOptions options, JFrame owner)
+	public PresetDialog(Settings options, JFrame owner)
 	{
 		this(options, owner, null);
 	}
@@ -90,7 +90,7 @@ public class PresetDialog extends JDialog implements ActionListener
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public PresetDialog(JaggeryOptions options, JFrame owner, Preset preset)
+	public PresetDialog(Settings options, JFrame owner, Preset preset)
 	{
 		super( owner, "Create a preset", true ); 
 		setResizable(false);
@@ -293,7 +293,7 @@ public class PresetDialog extends JDialog implements ActionListener
 					}
 					if( ! match)
 					{
-						//if the engine is in the file but is not registered in JAGGERY.INI, still shows it, but alert the user
+						//if the engine is in the file but is not registered in setting file, still shows it, but alert the user
 						customEnginesCheckBoxes.add(new JCheckBox(str));
 						customEnginesCheckBoxes.lastElement().setSelected(true);
 						JPanel groupPanel = new JPanel();
