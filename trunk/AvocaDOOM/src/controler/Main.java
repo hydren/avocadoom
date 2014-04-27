@@ -51,7 +51,7 @@ public class Main {
 	 */
 	public static void main(String[] args) 
 	{	
-		JaggeryOptions jo = new JaggeryOptions();
+		Settings jo = new Settings();
 		if(jo.useOSLF) try //TO FORCE TO USE THE SYSTEM LOOK & FEEL 
 		{
 			if(System.getProperty("os.name").equalsIgnoreCase("Linux"))

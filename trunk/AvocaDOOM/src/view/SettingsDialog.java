@@ -46,7 +46,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
 
 import model.EngineInfo;
-import controler.JaggeryOptions;
+import controler.Settings;
 import javax.swing.JCheckBox;
 
 public class SettingsDialog extends JDialog implements ActionListener{
@@ -61,7 +61,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 	JButton btnAddEntryPresets, btnAddbrowsePresets, btnEditPresets, btnRemovePresets;
 	JButton btnAddCustomEngine, btnEditCustomEngine, btnRemoveCustomEngine;
 	
-	JaggeryOptions original;
+	Settings original;
 	private JPanel panelPresets;
 	private JPanel panelSettings;
 	private JPanel panel;
@@ -78,7 +78,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 	private JCheckBox chckbxAlertWhenLaunching;
 	private JCheckBox chckbxShowAConsole;
 	
-	public SettingsDialog(JaggeryOptions options, JFrame owner)
+	public SettingsDialog(Settings options, JFrame owner)
 	{	
 		super( owner, "Settings", true ); 
 		pathsToSearchForPresets = new Vector<String>(options.pathsToSearchForPresets);

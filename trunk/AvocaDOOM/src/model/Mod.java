@@ -23,7 +23,7 @@ package model;
 import java.io.File;
 import java.util.Vector;
 
-import controler.JaggeryOptions;
+import controler.Settings;
 
 public class Mod 
 {
@@ -45,7 +45,7 @@ public class Mod
 		return file.getName()+"  -  "+file.getAbsolutePath();
 	}
 	
-	public static Vector<Mod> getAllAvailableMods(JaggeryOptions options)
+	public static Vector<Mod> getAllAvailableMods(Settings options)
 	{
 		Vector<Mod> filesToShow = new Vector<Mod>();
 		for(String str : options.pathsToSearchForWads)

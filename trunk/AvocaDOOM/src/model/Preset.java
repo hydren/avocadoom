@@ -32,7 +32,7 @@ import controler.FileAlreadyExistsException;
 public class Preset 
 {
 	private static final String 
-	PRESET_VALIDATION_LABEL="[JAGGERY_PRESET]",
+	PRESET_VALIDATION_LABEL="[PRESET]",
 	PRESET_WADS_LABEL="[WADS]",
 	PRESET_INFO_LABEL="[INFO]",
 	PRESET_NAME_TAG="name", 
@@ -47,7 +47,7 @@ public class Preset
 	
 	public Preset(File file) throws FileNotFoundException, Exception
 	{
-		if( ! isValidPreset(file) ) throw new Exception("File is not a valid Jaggery preset!");
+		if( ! isValidPreset(file) ) throw new Exception("File is not a valid preset!");
 		else this.file = file;
 		load();
 	}

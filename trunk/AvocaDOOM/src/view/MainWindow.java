@@ -53,7 +53,7 @@ import javax.swing.Box;
 public class MainWindow implements ActionListener, ListSelectionListener, WindowListener
 {
 	private JFrame window;
-	private JaggeryOptions options;
+	private Settings options;
 	
 	private JToolBar bottomToolBar;
 	private JButton btnRun, btnCreateNewPreset, btnEditPreset, btnRemovePreset, btnSettings, btnAbout;
@@ -67,7 +67,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 	private JLabel lblSelectedEnginePic;
 	private JLabel lblPresetInfo, lblPresetName, lblPresetDescription, lblPresetFilename, lblPresetimage;
 	
-	public MainWindow(JaggeryOptions options) 
+	public MainWindow(Settings options) 
 	{
 		window = new JFrame();
 		this.options = options;

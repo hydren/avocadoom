@@ -1,5 +1,5 @@
 /*      
- *      Copyright 2012 Carlos F. M. Faruolo (aka Hydren) E-mail: 5carlosfelipe5@gmail.com
+ *      Copyright 2014 Carlos F. M. Faruolo (aka Hydren) E-mail: 5carlosfelipe5@gmail.com
  *      
  *      This program is free software; you can redistribute it and/or modify
  *      it under the terms of the GNU General Public License as published by
@@ -31,37 +31,37 @@ import javax.swing.JOptionPane;
 
 import model.EngineInfo;
 
-public class JaggeryOptions 
+public class Settings 
 {
 	
 	//############ TAG NAMING ############
 	static final String
-	JAGGERY_PRESETS_LABEL="[PRESETS_PATHS]",
+	PRESETS_LABEL="[PRESETS_PATHS]",
 	
-	JAGGERY_WADS_LABEL="[WADS_PATHS]",
+	WADS_LABEL="[WADS_PATHS]",
 	
-	JAGGERY_ENGINES_LABEL="[EXTRA_ENGINES]",
-	JAGGERY_ENGINE_TAG="engine",
-	JAGGERY_ENGINE_NAME_TAG="enginename",
-	JAGGERY_ENGINE_EXECPATH_TAG = "command",
-	JAGGERY_ENGINE_IMGPATH_TAG = "image",
+	ENGINES_LABEL="[EXTRA_ENGINES]",
+	ENGINE_TAG="engine",
+	ENGINE_NAME_TAG="enginename",
+	ENGINE_EXECPATH_TAG = "command",
+	ENGINE_IMGPATH_TAG = "image",
 	
-	JAGGERY_SESSION_LABEL="[SESSION]",
-	JAGGERY_SESSION_LASTWINDOWSIZE_X="lastwindowsize_x",
-	JAGGERY_SESSION_LASTWINDOWSIZE_Y="lastwindowsize_y",
-	JAGGERY_SESSION_ALERTUSERDIFFENGINE="alertuserdiffengine",
-	JAGGERY_SESSION_USEOSLOOKANDFEEL="useoslf",
-	JAGGERY_SESSION_SHOWAUXCONSOLE="showauxconsole",
-	JAGGERY_SESSION_LASTVISITEDFOLDER="lastvisitedfolder", //NOT IMPLEMENTED, TODO
-	JAGGERY_SESSION_MAXIMIZED="maximized", //NOT IMPLEMENTED, TODO
+	SESSION_LABEL="[SESSION]",
+	SESSION_LASTWINDOWSIZE_X="lastwindowsize_x",
+	SESSION_LASTWINDOWSIZE_Y="lastwindowsize_y",
+	SESSION_ALERTUSERDIFFENGINE="alertuserdiffengine",
+	SESSION_USEOSLOOKANDFEEL="useoslf",
+	SESSION_SHOWAUXCONSOLE="showauxconsole",
+	SESSION_LASTVISITEDFOLDER="lastvisitedfolder", //NOT IMPLEMENTED, TODO
+	SESSION_MAXIMIZED="maximized", //NOT IMPLEMENTED, TODO
 	
-	JAGGERY_OPTIONS_FILE="settings.ini";
+	OPTIONS_FILE="settings.ini";
 	
-	static final String[] JAGGERY_INI_TAGS={
-		JAGGERY_SESSION_LABEL,
-		JAGGERY_PRESETS_LABEL,
-		JAGGERY_WADS_LABEL,
-		JAGGERY_ENGINES_LABEL
+	static final String[] INI_TAGS={
+		SESSION_LABEL,
+		PRESETS_LABEL,
+		WADS_LABEL,
+		ENGINES_LABEL
 	};
 	
 	//############ REAL FIELDS ##############
@@ -72,7 +72,7 @@ public class JaggeryOptions
 	public Vector<String> pathsToSearchForPresets, pathsToSearchForWads;
 	public Vector<EngineInfo> customEngines;
 	
-	public JaggeryOptions()
+	public Settings()
 	{
 		//first set to default values
 		window_size_x = 800;
@@ -87,63 +87,63 @@ public class JaggeryOptions
 		showAuxConsole = !System.getProperty("os.name").equalsIgnoreCase("Windows");
 		
 		//then override with file specifications
-		if( new File(JAGGERY_OPTIONS_FILE).exists() && new File(JAGGERY_OPTIONS_FILE).isFile() )
+		if( new File(OPTIONS_FILE).exists() && new File(OPTIONS_FILE).isFile() )
 		{
 			//TODO Parse the file for more info
 			try
 			{
 				String str="";
 				boolean isTagInStr=false;
-				Scanner scanner = new Scanner(new File(JAGGERY_OPTIONS_FILE));
+				Scanner scanner = new Scanner(new File(OPTIONS_FILE));
 				while(scanner.hasNextLine() )
 				{
 					if(!isTagInStr) str = scanner.nextLine();
 					else isTagInStr = false;
 					
 					//check for session info
-					if(str.trim().equalsIgnoreCase(JAGGERY_SESSION_LABEL) && scanner.hasNextLine()) inner: do
+					if(str.trim().equalsIgnoreCase(SESSION_LABEL) && scanner.hasNextLine()) inner: do
 					{   //entering session info reading mode
 						str = scanner.nextLine();
 						
-						if(str.toLowerCase().startsWith(JAGGERY_SESSION_ALERTUSERDIFFENGINE+'='))
+						if(str.toLowerCase().startsWith(SESSION_ALERTUSERDIFFENGINE+'='))
 						{
 							String value = str.substring(str.indexOf('=')+1);
 							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) alertIncompEngine = true;
 							else alertIncompEngine = false;
 						}
 						
-						else if(str.toLowerCase().startsWith(JAGGERY_SESSION_USEOSLOOKANDFEEL+'='))
+						else if(str.toLowerCase().startsWith(SESSION_USEOSLOOKANDFEEL+'='))
 						{
 							String value = str.substring(str.indexOf('=')+1);
 							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) useOSLF = true;
 							else useOSLF = false;
 						}
 						
-						else if(str.toLowerCase().startsWith(JAGGERY_SESSION_SHOWAUXCONSOLE+'='))
+						else if(str.toLowerCase().startsWith(SESSION_SHOWAUXCONSOLE+'='))
 						{
 							String value = str.substring(str.indexOf('=')+1);
 							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) showAuxConsole = true;
 							else showAuxConsole = false;
 						}
 						
-						else if(str.toLowerCase().startsWith(JAGGERY_SESSION_LASTVISITEDFOLDER+'='))
+						else if(str.toLowerCase().startsWith(SESSION_LASTVISITEDFOLDER+'='))
 						{
 							String path = str.substring(str.indexOf('=')+1).trim();
 							if( new File(path).isDirectory() ) lastVisitedFolder = path;
 						}
 						
-						else if(str.toLowerCase().startsWith(JAGGERY_SESSION_LASTWINDOWSIZE_X+'=')) try
+						else if(str.toLowerCase().startsWith(SESSION_LASTWINDOWSIZE_X+'=')) try
 						{
 							window_size_x = Integer.parseInt( str.substring(str.indexOf('=')+1) );
-						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+JAGGERY_SESSION_LASTWINDOWSIZE_X+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
+						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_LASTWINDOWSIZE_X+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
 						
-						else if(str.toLowerCase().startsWith(JAGGERY_SESSION_LASTWINDOWSIZE_Y+'=')) try
+						else if(str.toLowerCase().startsWith(SESSION_LASTWINDOWSIZE_Y+'=')) try
 						{
 							window_size_y = Integer.parseInt( str.substring(str.indexOf('=')+1) );
-						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+JAGGERY_SESSION_LASTWINDOWSIZE_Y+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
+						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_LASTWINDOWSIZE_Y+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
 						
 						//if no session info is found, check for main tags and break when it is
-						else for(String s : JAGGERY_INI_TAGS)
+						else for(String s : INI_TAGS)
 						{
 							if(str.equalsIgnoreCase(s))
 							{
@@ -157,7 +157,7 @@ public class JaggeryOptions
 					}while(scanner.hasNextLine()); //check for lines
 					
 					//check for presets paths
-					if(str.trim().equalsIgnoreCase(JAGGERY_PRESETS_LABEL) && scanner.hasNextLine()) inner2: do
+					if(str.trim().equalsIgnoreCase(PRESETS_LABEL) && scanner.hasNextLine()) inner2: do
 					{   //entering presets paths reading mode
 						str = scanner.nextLine();
 						
@@ -167,7 +167,7 @@ public class JaggeryOptions
 						}
 						
 						//if no session info is found, check for main tags and break when it is
-						else for(String s : JAGGERY_INI_TAGS)
+						else for(String s : INI_TAGS)
 						{
 							if(str.equalsIgnoreCase(s))
 							{
@@ -181,7 +181,7 @@ public class JaggeryOptions
 					}while(scanner.hasNextLine()); //check for lines
 					
 					//check for wads paths
-					if(str.trim().equalsIgnoreCase(JAGGERY_WADS_LABEL) && scanner.hasNextLine()) inner3: do
+					if(str.trim().equalsIgnoreCase(WADS_LABEL) && scanner.hasNextLine()) inner3: do
 					{   //entering presets paths reading mode
 						str = scanner.nextLine();
 						
@@ -191,7 +191,7 @@ public class JaggeryOptions
 						}
 						
 						//if no session info is found, check for main tags and break when it is
-						else for(String s : JAGGERY_INI_TAGS)
+						else for(String s : INI_TAGS)
 						{
 							if(str.equalsIgnoreCase(s))
 							{
@@ -204,29 +204,29 @@ public class JaggeryOptions
 						
 					}while(scanner.hasNextLine()); //check for lines
 					
-					if(str.trim().equalsIgnoreCase(JAGGERY_ENGINES_LABEL) && scanner.hasNextLine()) inner4: do
+					if(str.trim().equalsIgnoreCase(ENGINES_LABEL) && scanner.hasNextLine()) inner4: do
 					{
 						str = scanner.nextLine();
 						
-						if(str.trim().startsWith(JAGGERY_ENGINE_TAG+' ') && str.contains(":"))
+						if(str.trim().startsWith(ENGINE_TAG+' ') && str.contains(":"))
 						{
-							if( str.trim().length() == JAGGERY_ENGINE_TAG.length()+2 ) continue;
+							if( str.trim().length() == ENGINE_TAG.length()+2 ) continue;
 							
 							String code = str.trim().substring(str.trim().indexOf(' ')+1, str.trim().lastIndexOf(':'));
 							
 							if( ! scanner.hasNextLine()) continue;
 							str = scanner.nextLine();
-							if( ! str.trim().startsWith(JAGGERY_ENGINE_NAME_TAG) && str.contains("=")) continue;
+							if( ! str.trim().startsWith(ENGINE_NAME_TAG) && str.contains("=")) continue;
 							String name = str.trim().substring(str.trim().indexOf('=')+1);
 							
 							if( ! scanner.hasNextLine()) continue;
 							str = scanner.nextLine();
-							if( ! str.trim().startsWith(JAGGERY_ENGINE_EXECPATH_TAG) && str.contains("=")) continue;
+							if( ! str.trim().startsWith(ENGINE_EXECPATH_TAG) && str.contains("=")) continue;
 							String execpath = str.trim().substring(str.trim().indexOf('=')+1);
 							
 							if( ! scanner.hasNextLine()) continue;
 							str = scanner.nextLine();
-							if( ! str.trim().startsWith(JAGGERY_ENGINE_IMGPATH_TAG) && str.contains("=")) continue;
+							if( ! str.trim().startsWith(ENGINE_IMGPATH_TAG) && str.contains("=")) continue;
 							String img = str.trim().substring(str.trim().indexOf('=')+1);
 							if(img.trim().equalsIgnoreCase("null")) img = null;
 							
@@ -234,7 +234,7 @@ public class JaggeryOptions
 						}
 						
 						//if no session info is found, check for main tags and break when it is
-						else for(String s : JAGGERY_INI_TAGS)
+						else for(String s : INI_TAGS)
 						{
 							if(str.equalsIgnoreCase(s))
 							{
@@ -255,7 +255,7 @@ public class JaggeryOptions
 	}
 	
 	//Copy constructor
-	public JaggeryOptions(JaggeryOptions jo)
+	public Settings(Settings jo)
 	{
 		this.window_size_x = jo.window_size_x;
 		this.window_size_y = jo.window_size_y;
@@ -267,7 +267,7 @@ public class JaggeryOptions
 	{
 		//TODO save other info
 		
-		File file = new File(JAGGERY_OPTIONS_FILE);
+		File file = new File(OPTIONS_FILE);
 		
 		if(file.exists())
 		{
@@ -275,13 +275,13 @@ public class JaggeryOptions
 			{
 				if(!file.canWrite())
 				{
-					JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application is not allowed to write to file "+JAGGERY_OPTIONS_FILE, "Saving options error!", JOptionPane.ERROR_MESSAGE);
+					JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application is not allowed to write to file "+OPTIONS_FILE, "Saving options error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
 			}
 			else 
 			{
-				JOptionPane.showConfirmDialog(null, "A folder with named \""+JAGGERY_OPTIONS_FILE+"\" exists in the same folder!\n" +
+				JOptionPane.showConfirmDialog(null, "A folder with named \""+OPTIONS_FILE+"\" exists in the same folder!\n" +
 						" Can't save options to file! Delete or rename the folder to save!", "Naming error!", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
@@ -292,7 +292,7 @@ public class JaggeryOptions
 		}
 		catch (IOException e) 
 		{
-			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application could not create file "+JAGGERY_OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application could not create file "+OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
@@ -304,7 +304,7 @@ public class JaggeryOptions
 		}
 		catch (IOException e) 
 		{
-			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application could not write to file "+JAGGERY_OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application could not write to file "+OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		
@@ -312,37 +312,37 @@ public class JaggeryOptions
 		try
 		{	
 			//writing session options
-			fw.write(JAGGERY_SESSION_LABEL+'\n');
-			fw.write(JAGGERY_SESSION_ALERTUSERDIFFENGINE+'='+alertIncompEngine+'\n');
-			fw.write(JAGGERY_SESSION_USEOSLOOKANDFEEL+'='+useOSLF+'\n');
-			fw.write(JAGGERY_SESSION_SHOWAUXCONSOLE+'='+showAuxConsole+'\n');
-			fw.write(JAGGERY_SESSION_LASTVISITEDFOLDER+'='+lastVisitedFolder+'\n');
-			fw.write(JAGGERY_SESSION_LASTWINDOWSIZE_X+'='+window_size_x+'\n');
-			fw.write(JAGGERY_SESSION_LASTWINDOWSIZE_Y+'='+window_size_y+'\n');
+			fw.write(SESSION_LABEL+'\n');
+			fw.write(SESSION_ALERTUSERDIFFENGINE+'='+alertIncompEngine+'\n');
+			fw.write(SESSION_USEOSLOOKANDFEEL+'='+useOSLF+'\n');
+			fw.write(SESSION_SHOWAUXCONSOLE+'='+showAuxConsole+'\n');
+			fw.write(SESSION_LASTVISITEDFOLDER+'='+lastVisitedFolder+'\n');
+			fw.write(SESSION_LASTWINDOWSIZE_X+'='+window_size_x+'\n');
+			fw.write(SESSION_LASTWINDOWSIZE_Y+'='+window_size_y+'\n');
 			
 			//writing wads paths
-			fw.write(JAGGERY_WADS_LABEL+'\n');
+			fw.write(WADS_LABEL+'\n');
 			for(String str : pathsToSearchForWads) if( !str.equals(".") ) fw.write('@'+str+'\n');
 			
 			//writing presets paths
-			fw.write(JAGGERY_PRESETS_LABEL+'\n');
+			fw.write(PRESETS_LABEL+'\n');
 			for(String str : pathsToSearchForPresets) if( !str.equals(".") ) fw.write('@'+str+'\n');
 			
 			//writing custom engines info
-			fw.write(JAGGERY_ENGINES_LABEL+'\n');
+			fw.write(ENGINES_LABEL+'\n');
 			for(EngineInfo ei : customEngines) 
 			{
-				fw.write(JAGGERY_ENGINE_TAG + " " +ei.code+':'+'\n');
-				fw.write(JAGGERY_ENGINE_NAME_TAG+'='+ei.name+'\n');
-				fw.write(JAGGERY_ENGINE_EXECPATH_TAG+'='+ei.executablePath+'\n');
-				fw.write(JAGGERY_ENGINE_IMGPATH_TAG+'='+(ei.iconFileName==null?"null":ei.iconFileName)+'\n'+'\n');
+				fw.write(ENGINE_TAG + " " +ei.code+':'+'\n');
+				fw.write(ENGINE_NAME_TAG+'='+ei.name+'\n');
+				fw.write(ENGINE_EXECPATH_TAG+'='+ei.executablePath+'\n');
+				fw.write(ENGINE_IMGPATH_TAG+'='+(ei.iconFileName==null?"null":ei.iconFileName)+'\n'+'\n');
 			}
 			
 			fw.close();
 		}
 		catch(IOException e)
 		{
-			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: I/O error while writing to file "+JAGGERY_OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: I/O error while writing to file "+OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
 			return;
 		}
 		//end writing text file
