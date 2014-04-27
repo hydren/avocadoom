@@ -44,10 +44,14 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 
 import model.EngineInfo;
 import controler.Settings;
+
 import javax.swing.JCheckBox;
+
+import util.GUIHandler;
 
 public class SettingsDialog extends JDialog implements ActionListener{
 
@@ -98,7 +102,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		panelSettings.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 		tabbedPane.addTab("General", null, panelSettings, null);
 		
-		chckbxUseSystemLook = new JCheckBox("Use system's look and feel (requires app restart)");
+		chckbxUseSystemLook = new JCheckBox("Use system's look and feel");
 		chckbxUseSystemLook.setSelected(options.useOSLF);
 		panelSettings.add(chckbxUseSystemLook);
 		
@@ -305,9 +309,26 @@ public class SettingsDialog extends JDialog implements ActionListener{
 			original.pathsToSearchForWads = pathsToSearchForWads;
 			original.customEngines = customEngines;
 			original.alertIncompEngine = chckbxAlertWhenLaunching.isSelected();
-			original.useOSLF = chckbxUseSystemLook.isSelected();
 			original.showAuxConsole = chckbxShowAConsole.isSelected();
-			//new MainWindow(original);
+			
+			if(original.useOSLF != chckbxUseSystemLook.isSelected())
+			{
+				try
+				{
+					if(chckbxUseSystemLook.isSelected())
+						GUIHandler.attemptToUseOSLookAndFeel();
+					else
+						GUIHandler.setLookAndFeel(GUIHandler.getDefaultLookAndFeelName());
+
+					SwingUtilities.updateComponentTreeUI(this.getOwner());
+					original.useOSLF = chckbxUseSystemLook.isSelected();
+				} 
+				catch(Exception exc)
+				{
+					JOptionPane.showMessageDialog(this, "Error changing theme:" + exc.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+			
 			dispose();
 		}
 		
