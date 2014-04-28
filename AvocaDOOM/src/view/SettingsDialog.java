@@ -47,7 +47,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import model.EngineInfo;
-import controler.Settings;
+import controller.Settings;
 
 import javax.swing.JCheckBox;
 

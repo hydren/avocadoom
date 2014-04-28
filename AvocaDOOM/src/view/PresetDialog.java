@@ -49,8 +49,8 @@ import javax.swing.JTextField;
 import model.EngineInfo;
 import model.Mod;
 import model.Preset;
-import controler.FileAlreadyExistsException;
-import controler.Settings;
+import controller.Settings;
+import exceptions.FileAlreadyExistsException;
 
 public class PresetDialog extends JDialog implements ActionListener
 {

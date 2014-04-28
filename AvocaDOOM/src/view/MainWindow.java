@@ -44,7 +44,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import model.*;
-import controler.*;
+import controller.*;
+
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
