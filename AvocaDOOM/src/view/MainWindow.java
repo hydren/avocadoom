@@ -50,6 +50,7 @@ import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.Box;
+import java.awt.Color;
 
 public class MainWindow implements ActionListener, ListSelectionListener, WindowListener
 {
@@ -67,6 +68,8 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 	private JPanel panelEngineJLabels;
 	private JLabel lblSelectedEnginePic;
 	private JLabel lblPresetInfo, lblPresetName, lblPresetDescription, lblPresetFilename, lblPresetimage;
+	private JLabel lblVersion;
+	private Component horizontalGlue_1;
 	
 	public MainWindow(Settings options) 
 	{
@@ -76,7 +79,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		window.setSize(640, 480);
 		if( ! Main.isDebugBuild ) window.setSize(options.window_size_x, options.window_size_y);
 		window.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		window.setTitle("AvocaDOOM v"+Main.APP_VERSION);
+		window.setTitle("AvocaDOOM");
 		window.setIconImage(new ImageIcon("image/avocadoom.png").getImage());
 		
 		JSplitPane splitPane = new JSplitPane();
@@ -197,6 +200,13 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		
 		lblPresetInfo = new JLabel("Preset info");
 		bottomToolBar.add(lblPresetInfo);
+		
+		horizontalGlue_1 = Box.createHorizontalGlue();
+		bottomToolBar.add(horizontalGlue_1);
+		
+		lblVersion = new JLabel(Main.APP_VERSION);
+		lblVersion.setForeground(Color.LIGHT_GRAY);
+		bottomToolBar.add(lblVersion);
 		
 		//last thing to do
 		window.addWindowListener(this);
