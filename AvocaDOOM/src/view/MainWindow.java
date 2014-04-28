@@ -220,10 +220,9 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 					"Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) return;
 					process = runtime.exec(getCommandAndArguments( (EngineInfo) comboBox.getSelectedItem(), (Preset) presets_jlist.getSelectedValue() ));
 				}
-				else if(presets_jlist.getSelectedIndex() == 0 && content_jlist.getSelectedIndex() >-1)
-				{
-					//start with an specific wad/pk3
-					process = runtime.exec( ((EngineInfo) comboBox.getSelectedItem()).executablePath+" "+ ((Mod) content_jlist.getSelectedValue()).file.getPath());
+				else if(presets_jlist.getSelectedIndex() == 0 && content_jlist.getSelectedIndex() != -1)
+				{	
+					process = runtime.exec(getCommandAndArguments( (EngineInfo) comboBox.getSelectedItem(), content_jlist.getSelectedValues() ));
 				}
 				else
 				{
@@ -429,6 +428,22 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		if(preset != null) for(Mod m : preset.mods)
 		{
 			commandLine.add(m.file.getPath());
+		}
+		
+		return commandLine.toArray(str);
+	}
+	
+	public String[] getCommandAndArguments(EngineInfo info, Object[] mods)
+	{
+		if(info == null) return null;
+		
+		String[] str = new String[1];
+		Vector<String> commandLine = new Vector<String>();
+		commandLine.add(info.executablePath);
+		
+		if(mods != null) for(Object o : mods)
+		{
+			commandLine.add( ((Mod) o).file.getPath() );
 		}
 		
 		return commandLine.toArray(str);
