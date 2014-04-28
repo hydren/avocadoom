@@ -1,0 +1,21 @@
+TODO list
+
+Features:
+- Save position from the resizable panels. It is really annoying to resize everytime when starting the app.
+- Create presets from selecting mods at main window (using right-click and/or a button)
+- Offer more Look&Feel's
+- Launch more than one preset together
+- Create presets from other presets' mods
+- Create presets made up other presets (really painfull to do)
+- Change settings.ini to a .properties file and parse with java's Properties class. Do the same with presets files. Handle multi-entries (Paths) separately.
+
+Bugs:
+
+- Engine selection combo box lags for some unknown reason.
+- Some dialogs aren't centered (use setRelativeTo(null))
+- <DevilHunter>'s bug about Pwads not loading in order. Odd...
+
+Requests:
+
+- From <one_Two>, "... offer different views for the wad/mod selection - like icons so they're easier to find."
+- Also from <one_Two>, "(...) And maybe make the preset thing a bit more on the fly so it's quicker to start a game with a few mods, not sure if it's included but cl parameters would be good"
