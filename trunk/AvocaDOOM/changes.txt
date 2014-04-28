@@ -1,0 +1,11 @@
+(+ new feature, % change, - removal, * fixes)
+
+Changes from 0.9.3.1 to 0.9.4:
+
++ Added support for launching many wads together when 'all wads' is selected. It is possible to select many wads at once.
+% Look and Feel changes no longer requires app restart.
+% Fixed floatable status label on main window.
+% Added version label at the bottom right. Removed version from title bar.
+(also removed ugly four-numbered version)
+
+Previous changes to be added soon...
