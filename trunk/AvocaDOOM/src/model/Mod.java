@@ -23,7 +23,7 @@ package model;
 import java.io.File;
 import java.util.Vector;
 
-import controler.Settings;
+import controller.Settings;
 
 public class Mod 
 {

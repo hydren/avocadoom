@@ -18,7 +18,7 @@
  *      
  *      
  */
-package controler;
+package controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
