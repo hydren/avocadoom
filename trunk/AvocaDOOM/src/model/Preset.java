@@ -32,7 +32,7 @@ import exceptions.FileAlreadyExistsException;
 public class Preset 
 {
 	private static final String 
-	PRESET_VALIDATION_LABEL="[PRESET]",
+	PRESET_VALIDATION_LABEL="[JAGGERY_PRESET]",
 	PRESET_WADS_LABEL="[WADS]",
 	PRESET_INFO_LABEL="[INFO]",
 	PRESET_NAME_TAG="name", 
