@@ -115,7 +115,6 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		refreshPresetList();
 		
 		content_jlist = new JList();
-		content_jlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		Vector<Mod> lista = new Vector<Mod>();
 		content_jlist.setListData(lista);
 		
@@ -193,6 +192,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		toolBar.add(comboBox);
 		
 		bottomToolBar = new JToolBar();
+		bottomToolBar.setFloatable(false);
 		window.getContentPane().add(bottomToolBar, BorderLayout.SOUTH);
 		
 		lblPresetInfo = new JLabel("Preset info");
