@@ -70,6 +70,8 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 	private JLabel lblPresetInfo, lblPresetName, lblPresetDescription, lblPresetFilename, lblPresetimage;
 	private JLabel lblVersion;
 	private Component horizontalGlue_1;
+	private JSplitPane splitPane_main;
+	private JSplitPane splitPane_sub;
 	
 	public MainWindow(Settings options) 
 	{
@@ -82,11 +84,11 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		window.setTitle("AvocaDOOM");
 		window.setIconImage(new ImageIcon("image/avocadoom.png").getImage());
 		
-		JSplitPane splitPane = new JSplitPane();
-		window.getContentPane().add(splitPane, BorderLayout.CENTER);
+		splitPane_main = new JSplitPane();
+		window.getContentPane().add(splitPane_main, BorderLayout.CENTER);
 		
 		JPanel infoPanel = new JPanel();
-		splitPane.setRightComponent(infoPanel);
+		splitPane_main.setRightComponent(infoPanel);
 		infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
 		
 		lblPresetimage = new JLabel("");
@@ -108,9 +110,9 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		scrollPane.setViewportView(panelEngineJLabels);
 		panelEngineJLabels.setLayout(new BoxLayout(panelEngineJLabels, BoxLayout.Y_AXIS));
 		
-		JSplitPane splitPane_1 = new JSplitPane();
-		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
-		splitPane.setLeftComponent(splitPane_1);
+		splitPane_sub = new JSplitPane();
+		splitPane_sub.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		splitPane_main.setLeftComponent(splitPane_sub);
 		
 		presets_jlist = new JList();
 		presets_jlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -122,32 +124,34 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		content_jlist.setListData(lista);
 		
 		JScrollPane scrollPane_1 = new JScrollPane(presets_jlist);
-		splitPane_1.setLeftComponent(scrollPane_1);
+		splitPane_sub.setLeftComponent(scrollPane_1);
 		
 		JScrollPane scrollPane2 = new JScrollPane(content_jlist);
-		splitPane_1.setRightComponent(scrollPane2);
+		splitPane_sub.setRightComponent(scrollPane2);
 		
-		splitPane_1.setDividerLocation(100);
-		splitPane.setDividerLocation(400);
+		splitPane_sub.setDividerLocation(100);
+		if(options.subsplitpane_pos >= 0)
+			splitPane_sub.setDividerLocation(options.subsplitpane_pos);
+		
+		splitPane_main.setDividerLocation(400);
+		if(options.mainsplitpane_pos >= 0)
+			splitPane_main.setDividerLocation(options.mainsplitpane_pos);
 		
 		JToolBar toolBar = new JToolBar();
 		window.getContentPane().add(toolBar, BorderLayout.NORTH);
 		toolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
 		toolBar.setFloatable(false);
 		
-		//btnRun = new JButton("Run!");
 		btnRun = new JButton(new ImageIcon("image/play.png"));
 		btnRun.setToolTipText("Run!");
 		btnRun.addActionListener(this);
 		toolBar.add(btnRun);
 
-		//btnCreateNewPreset = new JButton("Create new preset");
 		btnCreateNewPreset = new JButton(new ImageIcon("image/create-preset.png"));
 		btnCreateNewPreset.setToolTipText("Create new preset");
 		btnCreateNewPreset.addActionListener(this);
 		toolBar.add(btnCreateNewPreset);
 		
-		//btnEditPreset = new JButton("Edit preset");
 		btnEditPreset = new JButton(new ImageIcon("image/edit-preset.png"));
 		btnEditPreset.setToolTipText("Edit preset");
 		btnEditPreset.addActionListener(this);
@@ -463,6 +467,8 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 	public void windowClosed(WindowEvent arg0) {
 		options.window_size_x = window.getWidth();
 		options.window_size_y = window.getHeight();
+		options.mainsplitpane_pos = splitPane_main.getDividerLocation();
+		options.subsplitpane_pos = splitPane_sub.getDividerLocation();
 		options.saveOptionsToFile();
 	}
 	
