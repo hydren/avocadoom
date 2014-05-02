@@ -146,6 +146,7 @@ public class EngineDialog extends JDialog implements ActionListener
 		
 		
 		setLocationByPlatform(true);
+		setLocationRelativeTo(null);
 		setVisible(true);
 	}
 
