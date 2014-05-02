@@ -1,16 +1,22 @@
-(+ new feature, % change, - removal, * fixes)
+(+ new feature, ~ change, - removal, * fixes)
+
+Changes from 0.9.4 to 0.9.5
++ Saving the resizable panels' position.
+~ Some dialogs now appear in the center instead of the top-left corner.
+~ Minor cosmetic changes
 
 Changes from 0.9.3.1 to 0.9.4:
 
 + Added support for launching many wads together when 'all wads' is selected. It is possible to select many wads at once.
-% Look and Feel changes no longer requires app restart.
-% Fixed floatable status label on main window.
-% Added version label at the bottom right. Removed version from title bar.
+~ Theme changes no longer requires app restart.
+~ Minor cosmetic changes
 (also removed ugly four-numbered version)
 
 Changes from 0.9.3 to 0.9.3.1:
 
 * Fixed issue about case-sensitive file loading. Now file loading should be case-insensitive.
 
+Changes from 0.9.2 to 0.9.3:
 
-Previous changes to be added soon...
+~ New icons from Joseph Hicks.
+* Some bugfixes and refactoring.

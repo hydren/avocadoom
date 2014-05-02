@@ -3,7 +3,6 @@ Take inspirations from ZDL.
 TODO list
 
 Features:
-- Save position from the resizable panels. It is really annoying to resize everytime when starting the app.
 - Create presets from selecting mods at main window (using right-click and/or a button)
 - Offer more Look&Feel's
 - Launch more than one preset together
@@ -14,7 +13,6 @@ Features:
 Bugs:
 
 - Engine selection combo box lags for some unknown reason.
-- Some dialogs aren't centered (use setRelativeTo(null))
 - <DevilHunter>'s bug about Pwads not loading in order. Odd...
 
 Requests:
