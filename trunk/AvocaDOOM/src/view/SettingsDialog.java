@@ -34,6 +34,7 @@ import java.io.File;
 import java.util.Vector;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -47,11 +48,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 
 import model.EngineInfo;
+import util.UIManager2;
 import controller.Settings;
-
-import javax.swing.JCheckBox;
-
-import util.GUIHandler;
 
 public class SettingsDialog extends JDialog implements ActionListener{
 
@@ -316,9 +314,9 @@ public class SettingsDialog extends JDialog implements ActionListener{
 				try
 				{
 					if(chckbxUseSystemLook.isSelected())
-						GUIHandler.attemptToUseOSLookAndFeel();
+						UIManager2.setLookAndFeelByName("System");
 					else
-						GUIHandler.setLookAndFeel(GUIHandler.getDefaultLookAndFeelName());
+						UIManager2.setLookAndFeel(UIManager2.getCrossPlatformLookAndFeelClassName());
 
 					SwingUtilities.updateComponentTreeUI(this.getOwner());
 					original.useOSLF = chckbxUseSystemLook.isSelected();
