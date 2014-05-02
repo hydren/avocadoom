@@ -49,6 +49,8 @@ public class Settings
 	SESSION_LABEL="[SESSION]",
 	SESSION_LASTWINDOWSIZE_X="lastwindowsize_x",
 	SESSION_LASTWINDOWSIZE_Y="lastwindowsize_y",
+	SESSION_MAINSPLITPANE_POS = "mainsplitpane_pos",
+	SESSION_SUBSPLITPANE_POS = "subsplitpane_pos",
 	SESSION_ALERTUSERDIFFENGINE="alertuserdiffengine",
 	SESSION_USEOSLOOKANDFEEL="useoslf",
 	SESSION_SHOWAUXCONSOLE="showauxconsole",
@@ -71,12 +73,15 @@ public class Settings
 	public boolean alertIncompEngine, useOSLF, showAuxConsole;
 	public Vector<String> pathsToSearchForPresets, pathsToSearchForWads;
 	public Vector<EngineInfo> customEngines;
+	public int mainsplitpane_pos, subsplitpane_pos;
 	
 	public Settings()
 	{
 		//first set to default values
 		window_size_x = 800;
 		window_size_y = 480;
+		mainsplitpane_pos = 400;
+		subsplitpane_pos = 100;
 		lastVisitedFolder="";
 		alertIncompEngine = useOSLF = true;
 		pathsToSearchForPresets = new Vector<String>();
@@ -141,6 +146,17 @@ public class Settings
 						{
 							window_size_y = Integer.parseInt( str.substring(str.indexOf('=')+1) );
 						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_LASTWINDOWSIZE_Y+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
+						
+						else if(str.toLowerCase().startsWith(SESSION_MAINSPLITPANE_POS+'=')) try
+						{
+							mainsplitpane_pos = Integer.parseInt( str.substring(str.indexOf('=')+1) );
+						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_MAINSPLITPANE_POS+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
+						
+						else if(str.toLowerCase().startsWith(SESSION_SUBSPLITPANE_POS+'=')) try
+						{
+							subsplitpane_pos = Integer.parseInt( str.substring(str.indexOf('=')+1) );
+						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_SUBSPLITPANE_POS+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
+						
 						
 						//if no session info is found, check for main tags and break when it is
 						else for(String s : INI_TAGS)
@@ -319,17 +335,19 @@ public class Settings
 			fw.write(SESSION_LASTVISITEDFOLDER+'='+lastVisitedFolder+'\n');
 			fw.write(SESSION_LASTWINDOWSIZE_X+'='+window_size_x+'\n');
 			fw.write(SESSION_LASTWINDOWSIZE_Y+'='+window_size_y+'\n');
+			fw.write(SESSION_MAINSPLITPANE_POS+'='+mainsplitpane_pos+'\n');
+			fw.write(SESSION_SUBSPLITPANE_POS+'='+subsplitpane_pos+'\n');
 			
 			//writing wads paths
-			fw.write(WADS_LABEL+'\n');
+			fw.write('\n'+WADS_LABEL+'\n');
 			for(String str : pathsToSearchForWads) if( !str.equals(".") ) fw.write('@'+str+'\n');
 			
 			//writing presets paths
-			fw.write(PRESETS_LABEL+'\n');
+			fw.write('\n'+PRESETS_LABEL+'\n');
 			for(String str : pathsToSearchForPresets) if( !str.equals(".") ) fw.write('@'+str+'\n');
 			
 			//writing custom engines info
-			fw.write(ENGINES_LABEL+'\n');
+			fw.write('\n'+ENGINES_LABEL+'\n');
 			for(EngineInfo ei : customEngines) 
 			{
 				fw.write(ENGINE_TAG + " " +ei.code+':'+'\n');
