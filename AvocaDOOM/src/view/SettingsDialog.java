@@ -92,7 +92,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		original = options;
 		
 		//window = new JFrame("Settings");
-		setMinimumSize(new Dimension(512, 250));
+		setMinimumSize(new Dimension(320, 320));
 		setSize(new Dimension(512, 327));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
@@ -100,18 +100,21 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		getContentPane().add(tabbedPane, BorderLayout.CENTER);
 		
 		panelSettings = new JPanel();
-		panelSettings.setLayout(new FlowLayout(FlowLayout.LEADING, 5, 5));
 		tabbedPane.addTab("General", null, panelSettings, null);
+		panelSettings.setLayout(null);
 		
 		chckbxUseSystemLook = new JCheckBox("Use system's look and feel");
+		chckbxUseSystemLook.setBounds(5, 5, 215, 23);
 		chckbxUseSystemLook.setSelected(options.useOSLF);
 		panelSettings.add(chckbxUseSystemLook);
 		
 		chckbxAlertWhenLaunching = new JCheckBox("Alert when using a preset with a different engine");
+		chckbxAlertWhenLaunching.setBounds(5, 33, 376, 23);
 		chckbxAlertWhenLaunching.setSelected(options.alertIncompEngine);
 		panelSettings.add(chckbxAlertWhenLaunching);
 		
 		chckbxShowAConsole = new JCheckBox("Show a console window with the engine's executable output");
+		chckbxShowAConsole.setBounds(5, 61, 457, 23);
 		chckbxShowAConsole.setSelected(options.showAuxConsole);
 		panelSettings.add(chckbxShowAConsole);
 		
