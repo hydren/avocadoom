@@ -50,6 +50,9 @@ import javax.swing.SwingUtilities;
 import model.EngineInfo;
 import util.UIManager2;
 import controller.Settings;
+import javax.swing.BoxLayout;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.border.EmptyBorder;
 
 public class SettingsDialog extends JDialog implements ActionListener{
 
@@ -117,6 +120,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		panelWadPk3.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblAllFoldersHereWadPk3 = new JLabel(" All folders here will be checked for wads, pk3, etc.");
+		lblAllFoldersHereWadPk3.setBorder(new EmptyBorder(4, 2, 4, 0));
 		panelWadPk3.add(lblAllFoldersHereWadPk3, BorderLayout.NORTH);
 		
 		wadPk3JList = new JList();
@@ -180,6 +184,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		panelPresets.setLayout(new BorderLayout(0, 0));
 		
 		JLabel lblAllFoldersHerePresets = new JLabel(" All folders here will be checked for presets.");
+		lblAllFoldersHerePresets.setBorder(new EmptyBorder(4, 2, 4, 0));
 		panelPresets.add(lblAllFoldersHerePresets, BorderLayout.NORTH);
 		
 		presetsJList = new JList();
@@ -240,15 +245,15 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		
 		panel_customEngines = new JPanel();
 		tabbedPane.addTab("Engine configs", null, panel_customEngines, null);
-		panel_customEngines.setLayout(null);
+		panel_customEngines.setLayout(new BorderLayout(0, 0));
 		
 		panel_engines_group = new JPanel();
-		panel_engines_group.setBounds(12, 12, 366, 200);
-		panel_customEngines.add(panel_engines_group);
+		panel_customEngines.add(panel_engines_group, BorderLayout.CENTER);
 		panel_engines_group.setPreferredSize(new Dimension(300, 200));
 		panel_engines_group.setLayout(new BorderLayout(0, 0));
 		
 		lblEnginesPathcommandLine = new JLabel("Saved configs:");
+		lblEnginesPathcommandLine.setBorder(new EmptyBorder(4, 2, 4, 0));
 		panel_engines_group.add(lblEnginesPathcommandLine, BorderLayout.NORTH);
 		
 		
@@ -261,21 +266,24 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		scrollPaneListEngines.setViewportView(customEnginesJlist);
 		
 		panel_engineButtons = new JPanel();
-		panel_engineButtons.setBounds(390, 12, 103, 200);
-		panel_customEngines.add(panel_engineButtons);
-		panel_engineButtons.setLayout(new GridLayout(0, 1, 0, 0));
+		panel_engineButtons.setPreferredSize(new Dimension(100, 100));
+		panel_customEngines.add(panel_engineButtons, BorderLayout.EAST);
 		
 		btnAddCustomEngine = new JButton("Add");
+		btnAddCustomEngine.setBounds(12, 20, 80, 35);
 		btnAddCustomEngine.addActionListener(this);
+		panel_engineButtons.setLayout(null);
 		btnAddCustomEngine.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_engineButtons.add(btnAddCustomEngine);
 		
 		btnEditCustomEngine = new JButton("Edit");
+		btnEditCustomEngine.setBounds(12, 70, 80, 35);
 		btnEditCustomEngine.addActionListener(this);
 		btnEditCustomEngine.setAlignmentX(Component.CENTER_ALIGNMENT);
 		panel_engineButtons.add(btnEditCustomEngine);
 		
 		btnRemoveCustomEngine = new JButton("Remove");
+		btnRemoveCustomEngine.setBounds(7, 120, 90, 34);
 		btnRemoveCustomEngine.addActionListener(this);
 		panel_engineButtons.add(btnRemoveCustomEngine);
 			
