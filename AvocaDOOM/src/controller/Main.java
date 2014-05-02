@@ -22,7 +22,7 @@ package controller;
 
 import javax.swing.JOptionPane;
 
-import util.GUIHandler;
+import util.UIManager2;
 import view.MainWindow;
 
 
@@ -53,8 +53,9 @@ public class Main {
 		Settings settings = new Settings();
 		if(settings.useOSLF) try //TO FORCE TO USE THE SYSTEM LOOK & FEEL 
 		{
-			GUIHandler.attemptToUseOSLookAndFeel();
-		} catch (Exception e) 
+			UIManager2.setLookAndFeelByName("System");
+		} 
+		catch (Exception e) 
 		{
 			JOptionPane.showMessageDialog(null, "Could not change application look and feel. Using a cross-platform one...");
 		}
