@@ -214,8 +214,9 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		
 		//last thing to do
 		window.addWindowListener(this);
-		window.setLocationByPlatform(true);
-		window.setVisible(true);		
+//		window.setLocationByPlatform(true); //causes jcombobox to bug (requires moving the window to fix)
+		window.setLocationRelativeTo(null);
+		window.setVisible(true);
 	}
 
 	@Override
