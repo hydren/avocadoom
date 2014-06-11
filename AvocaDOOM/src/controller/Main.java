@@ -28,7 +28,7 @@ import view.MainWindow;
 
 public class Main {
 	
-	public static final String APP_VERSION="0.9.5 Beta",
+	public static final String APP_VERSION="0.9.6 Beta",
 			APP_ABOUT_TEXT="AvocaDOOM - a simple manager for Doom engines.\n",
 			APP_LICENCE =   "Copyright (C) 2014 Carlos F. M. Faruolo (aka Hydren)\nE-mail: 5carlosfelipe5@gmail.com\n\n" +
 							"Doom graphics (C) Id Software - Buttons \n" +
