@@ -131,7 +131,7 @@ public class Settings
 						{
 							String value = str.substring(str.indexOf('=')+1);
 							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) useOGLgui = true;
-							else useOSLF = false;
+							else useOGLgui = false;
 						}
 						
 						else if(str.toLowerCase().startsWith(SESSION_SHOWAUXCONSOLE+'='))
