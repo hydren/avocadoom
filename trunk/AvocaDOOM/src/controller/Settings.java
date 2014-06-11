@@ -24,8 +24,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -71,8 +72,8 @@ public class Settings
 	public int window_size_y;
 	public String lastVisitedFolder;
 	public boolean alertIncompEngine, useOSLF, showAuxConsole;
-	public Vector<String> pathsToSearchForPresets, pathsToSearchForWads;
-	public Vector<EngineInfo> customEngines;
+	public List<String> pathsToSearchForPresets, pathsToSearchForWads;
+	public List<EngineInfo> customEngines;
 	public int mainsplitpane_pos, subsplitpane_pos;
 	
 	public Settings()
@@ -84,11 +85,11 @@ public class Settings
 		subsplitpane_pos = 100;
 		lastVisitedFolder="";
 		alertIncompEngine = useOSLF = true;
-		pathsToSearchForPresets = new Vector<String>();
+		pathsToSearchForPresets = new ArrayList<String>();
 		pathsToSearchForPresets.add(".");
-		pathsToSearchForWads = new Vector<String>();
+		pathsToSearchForWads = new ArrayList<String>();
 		pathsToSearchForWads.add(".");
-		customEngines = new Vector<EngineInfo>();
+		customEngines = new ArrayList<EngineInfo>();
 		showAuxConsole = !System.getProperty("os.name").equalsIgnoreCase("Windows");
 		
 		//then override with file specifications
@@ -275,8 +276,8 @@ public class Settings
 	{
 		this.window_size_x = jo.window_size_x;
 		this.window_size_y = jo.window_size_y;
-		this.pathsToSearchForPresets = new Vector<String>(jo.pathsToSearchForPresets);
-		this.pathsToSearchForWads = new Vector<String>(jo.pathsToSearchForWads);
+		this.pathsToSearchForPresets = new ArrayList<String>(jo.pathsToSearchForPresets);
+		this.pathsToSearchForWads = new ArrayList<String>(jo.pathsToSearchForWads);
 	}
 	
 	public void saveOptionsToFile()

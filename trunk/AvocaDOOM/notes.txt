@@ -2,18 +2,20 @@ Take inspirations from ZDL.
 
 TODO list
 
+Improvements:
+- Change settings.ini to a .properties file and parse with java's Properties class. Do the same with presets files. Handle multi-entries (Paths) separately.
+
 Features:
+- Buttons to change order from mods.
 - Create presets from selecting mods at main window (using right-click and/or a button)
 - Offer more Look&Feel's
 - Launch more than one preset together
 - Create presets from other presets' mods
 - Create presets made up other presets (really painfull to do)
-- Change settings.ini to a .properties file and parse with java's Properties class. Do the same with presets files. Handle multi-entries (Paths) separately.
 
 Bugs:
 
-- Engine selection combo box lags for some unknown reason.
-- <DevilHunter>'s bug about Pwads not loading in order. Odd...
+- <DevilHunter>'s bug about Pwads not loading in order. (Not confirmed)
 
 Requests:
 
