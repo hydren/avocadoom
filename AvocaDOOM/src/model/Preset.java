@@ -24,8 +24,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
-import java.util.Vector;
 
 import exceptions.FileAlreadyExistsException;
 
@@ -42,8 +43,8 @@ public class Preset
 	
 	public File file;
 	public String name, description, imagePath;
-	public Vector<String> engines;
-	public Vector<Mod> mods;
+	public List<String> engines;
+	public List<Mod> mods;
 	
 	public Preset(File file) throws FileNotFoundException, Exception
 	{
@@ -72,8 +73,8 @@ public class Preset
 				this.name="<unnamed preset>";
 				this.description="<no description>";
 				this.imagePath = null;
-				this.mods = new Vector<Mod>();
-				this.engines = new Vector<String>();
+				this.mods = new ArrayList<Mod>();
+				this.engines = new ArrayList<String>();
 				String str=null;
 				
 				//needed when a token is accidently already in str variable
@@ -170,12 +171,12 @@ public class Preset
 		return name+"  -  "+file.getAbsolutePath();
 	}
 	
-	public static final void createAndSave(File file, String name, String desc, String imgPath, Vector<String> engines, Vector<Mod> modsPaths) throws IOException, FileAlreadyExistsException, Exception
+	public static final void createAndSave(File file, String name, String desc, String imgPath, List<String> engines, List<Mod> modsPaths) throws IOException, FileAlreadyExistsException, Exception
 	{
 		createAndSave(file, name, desc, imgPath, engines, modsPaths, false);
 	}
 	
-	public static final void createAndSave(File file, String name, String desc, String imgPath, Vector<String> engines, Vector<Mod> modsPaths, boolean overwrite) throws IOException, FileAlreadyExistsException, Exception
+	public static final void createAndSave(File file, String name, String desc, String imgPath, List<String> engines, List<Mod> modsPaths, boolean overwrite) throws IOException, FileAlreadyExistsException, Exception
 	{
 		if(file.isDirectory()) throw new Exception("A folder with name "+file.getName()+" already exists!");
 		if(file.isFile() && ! overwrite) throw new FileAlreadyExistsException("A file with name "+file.getName()+" already exists!");

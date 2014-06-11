@@ -21,6 +21,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,14 +29,20 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
@@ -43,14 +50,11 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import model.*;
-import controller.*;
-
-import javax.swing.JPanel;
-import javax.swing.BoxLayout;
-import javax.swing.JComboBox;
-import javax.swing.Box;
-import java.awt.Color;
+import model.EngineInfo;
+import model.Mod;
+import model.Preset;
+import controller.Main;
+import controller.Settings;
 
 public class MainWindow implements ActionListener, ListSelectionListener, WindowListener
 {
@@ -120,8 +124,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		refreshPresetList();
 		
 		content_jlist = new JList();
-		Vector<Mod> lista = new Vector<Mod>();
-		content_jlist.setListData(lista);
+		content_jlist.setListData(new Vector<Mod>());
 		
 		JScrollPane scrollPane_1 = new JScrollPane(presets_jlist);
 		splitPane_sub.setLeftComponent(scrollPane_1);
@@ -326,7 +329,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 			//if(e.getFirstIndex() == 0) //means all pk3
 			if( ((JList) e.getSource()).getSelectedIndex() == 0) //means all pk3
 			{
-				content_jlist.setListData(Mod.getAllAvailableMods(options));
+				content_jlist.setListData(new Vector<Mod>(Mod.getAllAvailableMods(options)));
 				lblPresetInfo.setText("All wads");
 				lblPresetName.setText( "All wads");
 				lblPresetDescription.setText("");
@@ -416,7 +419,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		{
 			try {
 				preset.reload();
-				content_jlist.setListData(preset.mods);
+				content_jlist.setListData(new Vector<Mod>(preset.mods));
 			} catch (FileNotFoundException e1) {
 				JOptionPane.showConfirmDialog(window, "Could not open preset file for read: "+e1.getLocalizedMessage());
 				content_jlist.setListData(new Vector<Mod>());
@@ -437,7 +440,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		if(info == null) return null;
 		
 		String[] str = new String[1];
-		Vector<String> commandLine = new Vector<String>();
+		List<String> commandLine = new ArrayList<String>();
 		commandLine.add(info.executablePath);
 		
 		if(preset != null) for(Mod m : preset.mods)
@@ -453,7 +456,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		if(info == null) return null;
 		
 		String[] str = new String[1];
-		Vector<String> commandLine = new Vector<String>();
+		List<String> commandLine = new ArrayList<String>();
 		commandLine.add(info.executablePath);
 		
 		if(mods != null) for(Object o : mods)

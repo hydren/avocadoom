@@ -21,7 +21,8 @@
 package model;
 
 import java.io.File;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import controller.Settings;
 
@@ -45,9 +46,9 @@ public class Mod
 		return file.getName()+"  -  "+file.getAbsolutePath();
 	}
 	
-	public static Vector<Mod> getAllAvailableMods(Settings options)
+	public static List<Mod> getAllAvailableMods(Settings options)
 	{
-		Vector<Mod> filesToShow = new Vector<Mod>();
+		List<Mod> filesToShow = new ArrayList<Mod>();
 		for(String str : options.pathsToSearchForWads)
 		{
 			//System.out.println("analysing "+str+"...");

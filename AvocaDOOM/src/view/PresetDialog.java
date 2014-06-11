@@ -105,7 +105,7 @@ public class PresetDialog extends JDialog implements ActionListener
 		lblSavePresetIn.setBounds(12, 360, 107, 15);
 		getContentPane().add(lblSavePresetIn);
 		
-		comboBox = new JComboBox(options.pathsToSearchForPresets);
+		comboBox = new JComboBox(new Vector<String>(options.pathsToSearchForPresets));
 		comboBox.setBounds(133, 355, 463, 24);
 		comboBox.setSelectedIndex(0);
 		getContentPane().add(comboBox);
@@ -227,7 +227,7 @@ public class PresetDialog extends JDialog implements ActionListener
 		panelMods.add(scrollPane);
 		
 		listAvailable = new JList();
-		listAvailable.setListData(Mod.getAllAvailableMods(options));
+		listAvailable.setListData(new Vector<Mod>(Mod.getAllAvailableMods(options)));
 		scrollPane.setViewportView(listAvailable);
 		
 		JLabel lblWadsAvailable = new JLabel("Mods available:");
