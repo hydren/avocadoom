@@ -301,10 +301,12 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		getContentPane().add(panel, BorderLayout.SOUTH);
 		
 		btnApply = new JButton("Apply");
+		btnApply.setPreferredSize(new Dimension(90, 30));
 		btnApply.addActionListener(this);
 		panel.add(btnApply);
 		
 		btnCancel = new JButton("Cancel");
+		btnCancel.setPreferredSize(new Dimension(90, 30));
 		btnCancel.addActionListener(this);
 		panel.add(btnCancel);
 		
