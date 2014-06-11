@@ -229,6 +229,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		{
 			Runtime runtime = Runtime.getRuntime();
 			Process process = null;
+			String command_txt = null;
 			try {
 				if(presets_jlist.getSelectedIndex() > 0)
 				{
@@ -237,13 +238,22 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 					((EngineInfo) comboBox.getSelectedItem()).code + ". Are you sure you want to execute it anyway?", 
 					"Warning!", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE) == JOptionPane.NO_OPTION) return;
 					process = runtime.exec(getCommandAndArguments( (EngineInfo) comboBox.getSelectedItem(), (Preset) presets_jlist.getSelectedValue() ));
+					
+					command_txt = "";
+					for(String s : getCommandAndArguments( (EngineInfo) comboBox.getSelectedItem(), (Preset) presets_jlist.getSelectedValue() ))
+						command_txt += s+" ";
 				}
 				else if(presets_jlist.getSelectedIndex() == 0 && content_jlist.getSelectedIndex() != -1)
 				{	
 					process = runtime.exec(getCommandAndArguments( (EngineInfo) comboBox.getSelectedItem(), content_jlist.getSelectedValues() ));
+					
+					command_txt = "";
+					for(String s : getCommandAndArguments( (EngineInfo) comboBox.getSelectedItem(), content_jlist.getSelectedValues() ))
+						command_txt += s+" ";
 				}
 				else
 				{
+					command_txt = ((EngineInfo) comboBox.getSelectedItem()).executablePath;
 					process = runtime.exec(((EngineInfo) comboBox.getSelectedItem()).executablePath);
 				}
 
@@ -251,12 +261,9 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 				{
 					if(options.showAuxConsole)
 					{
-						RunningConsoleWindow aux = new RunningConsoleWindow(process, "Executing "+((EngineInfo) comboBox.getSelectedItem()).executablePath+"...");
+						RunningConsoleWindow aux = new RunningConsoleWindow(process, command_txt);
 						Thread anotherThread = new Thread(aux);
 						anotherThread.start();
-
-						//int exitVal = process.waitFor();
-						//System.out.println("Executable exited with error code "+exitVal);
 					}
 				}
 				else JOptionPane.showMessageDialog(window, "Error: null process", "Execution problem", JOptionPane.ERROR_MESSAGE);
