@@ -34,11 +34,12 @@ public class RunningConsoleWindow implements Runnable
 	JFrame outputWindow;
 	JTextArea output;
 	JScrollPane scrollingArea;
+	String cmd_txt;
 	Process proc;
 
-	public RunningConsoleWindow(Process proc, String title)
+	public RunningConsoleWindow(Process proc, String command_txt)
 	{
-		outputWindow = new JFrame(title);
+		outputWindow = new JFrame("Executing " + command_txt + "...");
 		output = new JTextArea("");
 		output.setEditable(false);
 		scrollingArea = new JScrollPane(output);
@@ -48,6 +49,7 @@ public class RunningConsoleWindow implements Runnable
 		outputWindow.setLocationByPlatform(true);
 		outputWindow.setVisible(true);
 		outputWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		cmd_txt = command_txt;
 		this.proc = proc;
 	}
 
@@ -56,6 +58,7 @@ public class RunningConsoleWindow implements Runnable
 		BufferedReader input = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 		String line=null;
 		try {
+			output.append(cmd_txt+"\n\n");
 			while((line=input.readLine()) != null) 
 			{ 
 				output.append(line+"\n");
