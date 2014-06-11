@@ -153,7 +153,7 @@ public class PresetDialog extends JDialog implements ActionListener
 		txtPresetname.setColumns(10);
 		
 		JLabel lblDescription = new JLabel("Description:");
-		lblDescription.setBounds(12, 52, 85, 18);
+		lblDescription.setBounds(12, 52, 95, 18);
 		panelGeneralInfo.add(lblDescription);
 		
 		txtPresetDescription = new JTextArea();
