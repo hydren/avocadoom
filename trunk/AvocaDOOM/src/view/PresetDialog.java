@@ -27,6 +27,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -80,6 +81,8 @@ public class PresetDialog extends JDialog implements ActionListener
 	JLabel lblImagePreview;
 	
 	private Vector<JCheckBox> customEnginesCheckBoxes;
+	private JButton btnUp;
+	private JButton btnDown;
 	
 	public PresetDialog(Settings options, JFrame owner)
 	{
@@ -94,7 +97,7 @@ public class PresetDialog extends JDialog implements ActionListener
 	{
 		super( owner, "Create a preset", true ); 
 		setResizable(false);
-		setSize(new Dimension(610, 450));
+		setSize(new Dimension(640, 450));
 		
 		addedFiles = new Vector<Mod>();
 		this.options = options;
@@ -106,32 +109,32 @@ public class PresetDialog extends JDialog implements ActionListener
 		getContentPane().add(lblSavePresetIn);
 		
 		comboBox = new JComboBox(new Vector<String>(options.pathsToSearchForPresets));
-		comboBox.setBounds(133, 355, 463, 24);
+		comboBox.setBounds(133, 355, 493, 24);
 		comboBox.setSelectedIndex(0);
 		getContentPane().add(comboBox);
 		
 		btnSave = new JButton("Save");
-		btnSave.setBounds(416, 386, 85, 25);
+		btnSave.setBounds(444, 386, 85, 25);
 		btnSave.addActionListener(this);
 		getContentPane().add(btnSave);
 		
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(513, 386, 85, 25);
+		btnCancel.setBounds(541, 386, 85, 25);
 		btnCancel.addActionListener(this);
 		getContentPane().add(btnCancel);
 		
 		lblPresetFileName = new JLabel("Preset filename:");
-		lblPresetFileName.setBounds(12, 391, 107, 15);
+		lblPresetFileName.setBounds(12, 391, 126, 15);
 		getContentPane().add(lblPresetFileName);
 		
 		textFieldFileNamePreset = new JTextField();
 		textFieldFileNamePreset.setText("unnamed_preset.txt");
-		textFieldFileNamePreset.setBounds(133, 386, 242, 24);
+		textFieldFileNamePreset.setBounds(143, 386, 289, 24);
 		getContentPane().add(textFieldFileNamePreset);
 		textFieldFileNamePreset.setColumns(10);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(12, 12, 586, 336);
+		tabbedPane.setBounds(12, 12, 614, 336);
 		getContentPane().add(tabbedPane);
 		
 		//==================================== GENERAL INFO TAB
@@ -145,7 +148,7 @@ public class PresetDialog extends JDialog implements ActionListener
 		
 		txtPresetname = new JTextField();
 		txtPresetname.setText("Unnamed preset");
-		txtPresetname.setBounds(76, 7, 490, 28);
+		txtPresetname.setBounds(76, 7, 521, 28);
 		panelGeneralInfo.add(txtPresetname);
 		txtPresetname.setColumns(10);
 		
@@ -158,27 +161,27 @@ public class PresetDialog extends JDialog implements ActionListener
 		txtPresetDescription.setColumns(10);
 		
 		JScrollPane scrollPane_2 = new JScrollPane();
-		scrollPane_2.setBounds(109, 49, 457, 128);
+		scrollPane_2.setBounds(109, 49, 488, 128);
 		scrollPane_2.setViewportView(txtPresetDescription);
 		panelGeneralInfo.add(scrollPane_2);
 		
 		JLabel lblImagePath = new JLabel("(Optional) Image path:");
-		lblImagePath.setBounds(12, 189, 143, 16);
+		lblImagePath.setBounds(12, 189, 168, 16);
 		panelGeneralInfo.add(lblImagePath);
 		
 		txtImagePath = new JTextField();
 		txtImagePath.setText("Image Path");
-		txtImagePath.setBounds(176, 184, 361, 26);
+		txtImagePath.setBounds(187, 184, 372, 26);
 		panelGeneralInfo.add(txtImagePath);
 		txtImagePath.setColumns(10);
 		
 		btnImagePath = new JButton("...");
 		btnImagePath.addActionListener(this);
-		btnImagePath.setBounds(540, 184, 26, 26);
+		btnImagePath.setBounds(571, 184, 26, 26);
 		panelGeneralInfo.add(btnImagePath);
 		
 		JLabel lblPreview = new JLabel("Preview:");
-		lblPreview.setBounds(12, 243, 60, 16);
+		lblPreview.setBounds(12, 243, 73, 16);
 		panelGeneralInfo.add(lblPreview);
 		
 		lblImagePreview = new JLabel("");
@@ -193,7 +196,7 @@ public class PresetDialog extends JDialog implements ActionListener
 		panelEngines.setLayout(null);
 		
 		JLabel lblEngine = new JLabel("Engines:");
-		lblEngine.setBounds(12, 12, 57, 16);
+		lblEngine.setBounds(12, 12, 76, 16);
 		panelEngines.add(lblEngine);
 		
 		panelEnginesList = new JPanel();
@@ -213,7 +216,7 @@ public class PresetDialog extends JDialog implements ActionListener
 		}
 		
 		scrollPane_3 = new JScrollPane();
-		scrollPane_3.setBounds(12, 40, 554, 248);
+		scrollPane_3.setBounds(12, 40, 585, 248);
 		scrollPane_3.setViewportView(panelEnginesList);
 		panelEngines.add(scrollPane_3);
 		
@@ -259,6 +262,16 @@ public class PresetDialog extends JDialog implements ActionListener
 		buttonExclude.addActionListener(this);
 		buttonExclude.setBounds(266, 219, 57, 25);
 		panelMods.add(buttonExclude);
+		
+		btnUp = new JButton(new ImageIcon("image/arrow-up.png"));
+		btnUp.setBounds(571, 93, 32, 48);
+		btnUp.addActionListener(this);
+		panelMods.add(btnUp);
+		
+		btnDown = new JButton(new ImageIcon("image/arrow-down.png"));
+		btnDown.setBounds(571, 163, 32, 48);
+		btnDown.addActionListener(this);
+		panelMods.add(btnDown);
 		
 		
 		
@@ -339,15 +352,25 @@ public class PresetDialog extends JDialog implements ActionListener
 	public void actionPerformed(ActionEvent e) 
 	{
 		// BUTTON INCLUDE
-		if(e.getSource().equals(buttonInclude) && listAvailable.getSelectedIndex()>-1)
+		if(e.getSource().equals(buttonInclude) && listAvailable.getSelectedIndex() > -1)
 		{
 			addedFiles.add( (Mod) listAvailable.getSelectedValue() );
 		}
 		
 		//BUTTON REMOVE
-		else if(e.getSource().equals(buttonExclude) && listIncluded.getSelectedIndex()>-1)
+		else if(e.getSource().equals(buttonExclude) && listIncluded.getSelectedIndex() > -1)
 		{
 			addedFiles.remove(listIncluded.getSelectedIndex());
+		}
+		
+		else if(e.getSource().equals(btnUp) && listIncluded.getSelectedIndex() > 0)
+		{
+			Collections.swap(addedFiles, listIncluded.getSelectedIndex(), listIncluded.getSelectedIndex()-1);
+		}
+		
+		else if(e.getSource().equals(btnDown) && listIncluded.getSelectedIndex() < addedFiles.size()-1)
+		{
+			Collections.swap(addedFiles, listIncluded.getSelectedIndex(), listIncluded.getSelectedIndex()+1);
 		}
 		
 		//BUTTON SAVE PRESET
