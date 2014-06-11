@@ -8,6 +8,7 @@ Improvements:
 Features:
 - Create presets from selecting mods at main window (using right-click and/or a button)
 - Offer more Look&Feel's
+- Offer old gpl theme
 - Launch more than one preset together
 - Create presets from other presets' mods
 - Create presets made up other presets (really painfull to do)
