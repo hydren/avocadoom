@@ -79,6 +79,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 	private JCheckBox chckbxUseSystemLook;
 	private JCheckBox chckbxAlertWhenLaunching;
 	private JCheckBox chckbxShowAConsole;
+	private JCheckBox chckbxUseOpenglRender;
 	
 	public SettingsDialog(Settings options, JFrame owner)
 	{	
@@ -114,6 +115,12 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		chckbxShowAConsole.setBounds(5, 61, 457, 23);
 		chckbxShowAConsole.setSelected(options.showAuxConsole);
 		panelSettings.add(chckbxShowAConsole);
+		
+		chckbxUseOpenglRender = new JCheckBox("Use OpenGL rendering for Avocadoom (requires restart)");
+		chckbxUseOpenglRender.setToolTipText("Fix some visual glitches but may cause problems on machines with OpenGL older than 1.2");
+		chckbxUseOpenglRender.setBounds(5, 88, 422, 23);
+		chckbxUseOpenglRender.setSelected(options.useOGLgui);
+		panelSettings.add(chckbxUseOpenglRender);
 		
 		JPanel panelWadPk3 = new JPanel();
 		tabbedPane.addTab("Wads/PK3s", null, panelWadPk3, null);
@@ -333,6 +340,13 @@ public class SettingsDialog extends JDialog implements ActionListener{
 				{
 					JOptionPane.showMessageDialog(this, "Error changing theme:" + exc.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
+			}
+			
+			if(original.useOGLgui != chckbxUseOpenglRender.isSelected())
+			{
+				if(chckbxUseOpenglRender.isSelected())
+					System.setProperty("sun.java2d.opengl","true");
+				original.useOGLgui = chckbxUseOpenglRender.isSelected();
 			}
 			
 			dispose();

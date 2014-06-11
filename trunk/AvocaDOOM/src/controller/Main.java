@@ -50,8 +50,11 @@ public class Main {
 	 */
 	public static void main(String[] args) 
 	{	
-		System.setProperty("sun.java2d.opengl","true"); //fix some visual artifacts
 		Settings settings = new Settings();
+		
+		if(settings.useOGLgui)
+			System.setProperty("sun.java2d.opengl","true"); //fix some visual artifacts
+		
 		if(settings.useOSLF) try //TO FORCE TO USE THE SYSTEM LOOK & FEEL 
 		{
 			UIManager2.setLookAndFeelByName("System");
@@ -60,6 +63,7 @@ public class Main {
 		{
 			JOptionPane.showMessageDialog(null, "Could not change application look and feel. Using a cross-platform one...");
 		}
+
 		new MainWindow( settings );
 	}
 }

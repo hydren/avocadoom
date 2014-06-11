@@ -54,6 +54,7 @@ public class Settings
 	SESSION_SUBSPLITPANE_POS = "subsplitpane_pos",
 	SESSION_ALERTUSERDIFFENGINE="alertuserdiffengine",
 	SESSION_USEOSLOOKANDFEEL="useoslf",
+	SESSION_USEOGLGUI="useoglgui",
 	SESSION_SHOWAUXCONSOLE="showauxconsole",
 	SESSION_LASTVISITEDFOLDER="lastvisitedfolder", //NOT IMPLEMENTED, TODO
 	SESSION_MAXIMIZED="maximized", //NOT IMPLEMENTED, TODO
@@ -71,7 +72,7 @@ public class Settings
 	public int window_size_x;
 	public int window_size_y;
 	public String lastVisitedFolder;
-	public boolean alertIncompEngine, useOSLF, showAuxConsole;
+	public boolean alertIncompEngine, useOSLF, showAuxConsole, useOGLgui;
 	public List<String> pathsToSearchForPresets, pathsToSearchForWads;
 	public List<EngineInfo> customEngines;
 	public int mainsplitpane_pos, subsplitpane_pos;
@@ -85,6 +86,7 @@ public class Settings
 		subsplitpane_pos = 100;
 		lastVisitedFolder="";
 		alertIncompEngine = useOSLF = true;
+		useOGLgui = false;
 		pathsToSearchForPresets = new ArrayList<String>();
 		pathsToSearchForPresets.add(".");
 		pathsToSearchForWads = new ArrayList<String>();
@@ -122,6 +124,13 @@ public class Settings
 						{
 							String value = str.substring(str.indexOf('=')+1);
 							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) useOSLF = true;
+							else useOSLF = false;
+						}
+
+						else if(str.toLowerCase().startsWith(SESSION_USEOGLGUI+'='))
+						{
+							String value = str.substring(str.indexOf('=')+1);
+							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) useOGLgui = true;
 							else useOSLF = false;
 						}
 						
@@ -332,6 +341,7 @@ public class Settings
 			fw.write(SESSION_LABEL+'\n');
 			fw.write(SESSION_ALERTUSERDIFFENGINE+'='+alertIncompEngine+'\n');
 			fw.write(SESSION_USEOSLOOKANDFEEL+'='+useOSLF+'\n');
+			fw.write(SESSION_USEOGLGUI+'='+useOGLgui+'\n');
 			fw.write(SESSION_SHOWAUXCONSOLE+'='+showAuxConsole+'\n');
 			fw.write(SESSION_LASTVISITEDFOLDER+'='+lastVisitedFolder+'\n');
 			fw.write(SESSION_LASTWINDOWSIZE_X+'='+window_size_x+'\n');
