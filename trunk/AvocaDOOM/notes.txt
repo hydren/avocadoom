@@ -6,7 +6,6 @@ Improvements:
 - Change settings.ini to a .properties file and parse with java's Properties class. Do the same with presets files. Handle multi-entries (Paths) separately.
 
 Features:
-- Buttons to change order from mods.
 - Create presets from selecting mods at main window (using right-click and/or a button)
 - Offer more Look&Feel's
 - Launch more than one preset together
