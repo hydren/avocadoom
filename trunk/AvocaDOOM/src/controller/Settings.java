@@ -1,81 +1,75 @@
-/*      
- *      Copyright 2014 Carlos F. M. Faruolo (aka Hydren) E-mail: 5carlosfelipe5@gmail.com
- *      
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation; either version 2 of the License, or
- *      (at your option) any later version.
- *      
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
- *      
- *      You should have received a copy of the GNU General Public License
- *      along with this program; if not, write to the Free Software
- *      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
- *      MA 02110-1301, USA.
- *      
- *      
- */
 package controller;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.List;
-import java.util.Scanner;
 import java.util.ArrayList;
-
-import javax.swing.JOptionPane;
+import java.util.List;
+import java.util.Properties;
+import java.util.Scanner;
 
 import model.EngineInfo;
 
 public class Settings 
 {
+	//application settings
 	
-	//############ TAG NAMING ############
-	static final String
-	PRESETS_LABEL="[PRESETS_PATHS]",
-	
-	WADS_LABEL="[WADS_PATHS]",
-	
-	ENGINES_LABEL="[EXTRA_ENGINES]",
-	ENGINE_TAG="engine",
-	ENGINE_NAME_TAG="enginename",
-	ENGINE_EXECPATH_TAG = "command",
-	ENGINE_IMGPATH_TAG = "image",
-	
-	SESSION_LABEL="[SESSION]",
-	SESSION_LASTWINDOWSIZE_X="lastwindowsize_x",
-	SESSION_LASTWINDOWSIZE_Y="lastwindowsize_y",
-	SESSION_MAINSPLITPANE_POS = "mainsplitpane_pos",
-	SESSION_SUBSPLITPANE_POS = "subsplitpane_pos",
-	SESSION_ALERTUSERDIFFENGINE="alertuserdiffengine",
-	SESSION_USEOSLOOKANDFEEL="useoslf",
-	SESSION_USEOGLGUI="useoglgui",
-	SESSION_SHOWAUXCONSOLE="showauxconsole",
-	SESSION_LASTVISITEDFOLDER="lastvisitedfolder", //NOT IMPLEMENTED, TODO
-	SESSION_MAXIMIZED="maximized", //NOT IMPLEMENTED, TODO
-	
-	OPTIONS_FILE="settings.ini";
-	
-	static final String[] INI_TAGS={
-		SESSION_LABEL,
-		PRESETS_LABEL,
-		WADS_LABEL,
-		ENGINES_LABEL
-	};
-	
-	//############ REAL FIELDS ##############
+	/** Main window width. */
 	public int window_size_x;
+
+	/** Main window width. */
 	public int window_size_y;
+
+	/** Last visited folder in file chooser. */
 	public String lastVisitedFolder;
-	public boolean alertIncompEngine, useOSLF, showAuxConsole, useOGLgui;
-	public List<String> pathsToSearchForPresets, pathsToSearchForWads;
+	
+	/** Flag to indicate whether is to alert if the user is running an preset not set as compatible with the chosen engine. */
+	public boolean alertIncompEngine;
+	
+	/** Flag to indicate whether the app should use the OS look and feel. */
+	public boolean useOSLF;
+	
+	/** Flag to indicate whether to show an auxiliary console window with the engine's output. */
+	public boolean showAuxConsole;
+	
+	/** Flag to indicate whether Swing should use OpenGL render or not. Fix some glitches in linux, but may not work on systems with an OpenGL version older than 1.2 */
+	public boolean useOGLgui;
+	
+	/** List of paths to search for presets. */
+	public List<String> pathsToSearchForPresets;
+	
+	/** List of paths to search for mods/wads. */
+	public List<String> pathsToSearchForWads;
+	
+	/** List of registered engines. */
 	public List<EngineInfo> customEngines;
-	public int mainsplitpane_pos, subsplitpane_pos;
+	
+	/** Position of the main splitpane, from the main window. */
+	public int mainsplitpane_pos;
+	
+	/** Position of the sub/second splitpane, from the main window. */
+	public int subsplitpane_pos;
+	
+	// === file parsing static fields
+	
+	public static final String 
+		SESSION_LASTWINDOWSIZE_X="lastwindowsize_x",
+		SESSION_LASTWINDOWSIZE_Y="lastwindowsize_y",
+		SESSION_MAINSPLITPANE_POS = "mainsplitpane_pos",
+		SESSION_SUBSPLITPANE_POS = "subsplitpane_pos",
+		SESSION_ALERTUSERDIFFENGINE="alertuserdiffengine",
+		SESSION_USEOSLOOKANDFEEL="useoslf",
+		SESSION_USEOGLGUI="useoglgui",
+		SESSION_SHOWAUXCONSOLE="showauxconsole",
+		SESSION_LASTVISITEDFOLDER="lastvisitedfolder",
+		
+		SESSION_MAXIMIZED="maximized"; //NOT IMPLEMENTED, TODO
+	
+	public static File SETTINGS_FILE=new File("settings.properties");
 	
 	public Settings()
 	{
@@ -85,297 +79,201 @@ public class Settings
 		mainsplitpane_pos = 400;
 		subsplitpane_pos = 100;
 		lastVisitedFolder="";
-		alertIncompEngine = useOSLF = true;
+		alertIncompEngine = true;
+		useOSLF = true;
 		useOGLgui = false;
+		showAuxConsole = !System.getProperty("os.name").equalsIgnoreCase("Windows");
 		pathsToSearchForPresets = new ArrayList<String>();
 		pathsToSearchForPresets.add(".");
 		pathsToSearchForWads = new ArrayList<String>();
 		pathsToSearchForWads.add(".");
 		customEngines = new ArrayList<EngineInfo>();
-		showAuxConsole = !System.getProperty("os.name").equalsIgnoreCase("Windows");
+	}
+	
+	public void load() throws FileNotFoundException, IOException, Exception
+	{	
+		parseEngines();
+		parsePaths();
 		
-		//then override with file specifications
-		if( new File(OPTIONS_FILE).exists() && new File(OPTIONS_FILE).isFile() )
+		FileInputStream fis = new FileInputStream(SETTINGS_FILE);
+		Properties p = new Properties();
+		p.load(fis);
+		fis.close();
+		
+		String tmp=null;
+		if((tmp = p.getProperty(SESSION_LASTWINDOWSIZE_X)) != null) try{
+			window_size_x = Integer.parseInt(tmp);
+		}catch(NumberFormatException nfe){}
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_LASTWINDOWSIZE_Y)) != null) try{
+			window_size_y = Integer.parseInt(tmp);
+		}catch(NumberFormatException nfe){}
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_MAINSPLITPANE_POS)) != null) try{
+			mainsplitpane_pos = Integer.parseInt(tmp);
+		}catch(NumberFormatException nfe){}
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_SUBSPLITPANE_POS)) != null) try{
+			subsplitpane_pos = Integer.parseInt(tmp);
+		}catch(NumberFormatException nfe){}
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_LASTVISITEDFOLDER)) != null) if(new File(tmp).isFile())
+			lastVisitedFolder = tmp;
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_ALERTUSERDIFFENGINE)) != null)
+			alertIncompEngine = Boolean.parseBoolean(tmp);
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_USEOSLOOKANDFEEL)) != null)
+			useOSLF = Boolean.parseBoolean(tmp);
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_USEOGLGUI)) != null)
+			useOGLgui = Boolean.parseBoolean(tmp);
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_SHOWAUXCONSOLE)) != null)
+			showAuxConsole = Boolean.parseBoolean(tmp);
+		
+	}
+	
+	public void store() throws FileNotFoundException, IOException
+	{
+		Properties p = new Properties();
+		p.setProperty(SESSION_LASTWINDOWSIZE_X, window_size_x+"");
+		p.setProperty(SESSION_LASTWINDOWSIZE_Y, window_size_y+"");
+		p.setProperty(SESSION_MAINSPLITPANE_POS, mainsplitpane_pos+"");
+		p.setProperty(SESSION_SUBSPLITPANE_POS, subsplitpane_pos+"");
+		p.setProperty(SESSION_LASTVISITEDFOLDER, lastVisitedFolder+"");
+		p.setProperty(SESSION_ALERTUSERDIFFENGINE, alertIncompEngine+"");
+		p.setProperty(SESSION_USEOSLOOKANDFEEL, useOSLF+"");
+		p.setProperty(SESSION_USEOGLGUI, useOGLgui+"");
+		p.setProperty(SESSION_SHOWAUXCONSOLE, showAuxConsole+"");
+		FileOutputStream fos = new FileOutputStream(SETTINGS_FILE);
+		p.store(fos, "avocadoom settings v2");
+		fos.close();
+		storePaths();
+		storeEngines();
+	}
+	
+	public static final String 
+		SESSION_PRESET_PATH="preset.path",
+		SESSION_WAD_PATH="wad.path";
+	
+	private void parsePaths() throws FileNotFoundException
+	{
+		Scanner scan = new Scanner(SETTINGS_FILE);
+		
+		while(scan.hasNextLine())
 		{
-			//TODO Parse the file for more info
-			try
+			String line = scan.nextLine();
+			if(line.trim().startsWith(SESSION_PRESET_PATH) && line.contains("=") && line.indexOf('=') != line.length()-1)
 			{
-				String str="";
-				boolean isTagInStr=false;
-				Scanner scanner = new Scanner(new File(OPTIONS_FILE));
-				while(scanner.hasNextLine() )
-				{
-					if(!isTagInStr) str = scanner.nextLine();
-					else isTagInStr = false;
-					
-					//check for session info
-					if(str.trim().equalsIgnoreCase(SESSION_LABEL) && scanner.hasNextLine()) inner: do
-					{   //entering session info reading mode
-						str = scanner.nextLine();
-						
-						if(str.toLowerCase().startsWith(SESSION_ALERTUSERDIFFENGINE+'='))
-						{
-							String value = str.substring(str.indexOf('=')+1);
-							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) alertIncompEngine = true;
-							else alertIncompEngine = false;
-						}
-						
-						else if(str.toLowerCase().startsWith(SESSION_USEOSLOOKANDFEEL+'='))
-						{
-							String value = str.substring(str.indexOf('=')+1);
-							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) useOSLF = true;
-							else useOSLF = false;
-						}
+				String tmp = line.substring(line.indexOf('=')+1).trim();
+				if( !tmp.isEmpty() && new File(tmp).isFile() )
+					pathsToSearchForPresets.add(tmp);
+			}
+			else if(line.trim().startsWith(SESSION_WAD_PATH) && line.contains("=") && line.indexOf('=') != line.length()-1)
+			{
+				String tmp = line.substring(line.indexOf('=')+1).trim();
+				if( !tmp.isEmpty() && new File(tmp).isFile() )
+					pathsToSearchForWads.add(tmp);
+			}
+		}
+		
+		scan.close();
+	}
+	
+	private void storePaths() throws IOException
+	{
+		BufferedWriter w = new BufferedWriter(new FileWriter(SETTINGS_FILE, true));
+		w.write("\n");
+		for(String path : pathsToSearchForPresets) if(path.equals(".")==false)
+			w.write(SESSION_PRESET_PATH + "=" + path+"\n");
 
-						else if(str.toLowerCase().startsWith(SESSION_USEOGLGUI+'='))
-						{
-							String value = str.substring(str.indexOf('=')+1);
-							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) useOGLgui = true;
-							else useOGLgui = false;
-						}
-						
-						else if(str.toLowerCase().startsWith(SESSION_SHOWAUXCONSOLE+'='))
-						{
-							String value = str.substring(str.indexOf('=')+1);
-							if( value.trim().equalsIgnoreCase("true") || value.trim().equals("1") ) showAuxConsole = true;
-							else showAuxConsole = false;
-						}
-						
-						else if(str.toLowerCase().startsWith(SESSION_LASTVISITEDFOLDER+'='))
-						{
-							String path = str.substring(str.indexOf('=')+1).trim();
-							if( new File(path).isDirectory() ) lastVisitedFolder = path;
-						}
-						
-						else if(str.toLowerCase().startsWith(SESSION_LASTWINDOWSIZE_X+'=')) try
-						{
-							window_size_x = Integer.parseInt( str.substring(str.indexOf('=')+1) );
-						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_LASTWINDOWSIZE_X+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
-						
-						else if(str.toLowerCase().startsWith(SESSION_LASTWINDOWSIZE_Y+'=')) try
-						{
-							window_size_y = Integer.parseInt( str.substring(str.indexOf('=')+1) );
-						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_LASTWINDOWSIZE_Y+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
-						
-						else if(str.toLowerCase().startsWith(SESSION_MAINSPLITPANE_POS+'=')) try
-						{
-							mainsplitpane_pos = Integer.parseInt( str.substring(str.indexOf('=')+1) );
-						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_MAINSPLITPANE_POS+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
-						
-						else if(str.toLowerCase().startsWith(SESSION_SUBSPLITPANE_POS+'=')) try
-						{
-							subsplitpane_pos = Integer.parseInt( str.substring(str.indexOf('=')+1) );
-						} catch(NumberFormatException e1) { JOptionPane.showConfirmDialog(null, "Warning! No valid number specified in \""+SESSION_SUBSPLITPANE_POS+"\" \nValue:"+str.substring(str.indexOf('=')+1)); }
-						
-						
-						//if no session info is found, check for main tags and break when it is
-						else for(String s : INI_TAGS)
-						{
-							if(str.equalsIgnoreCase(s))
-							{
-								isTagInStr = true;
-								break inner;
-							}
-						}
-						
-						//if no valid tag is found, just ignore the line
-						
-					}while(scanner.hasNextLine()); //check for lines
-					
-					//check for presets paths
-					if(str.trim().equalsIgnoreCase(PRESETS_LABEL) && scanner.hasNextLine()) inner2: do
-					{   //entering presets paths reading mode
-						str = scanner.nextLine();
-						
-						if(str.startsWith("@"))
-						{
-							pathsToSearchForPresets.add(str.substring(1));
-						}
-						
-						//if no session info is found, check for main tags and break when it is
-						else for(String s : INI_TAGS)
-						{
-							if(str.equalsIgnoreCase(s))
-							{
-								isTagInStr = true;
-								break inner2;
-							}
-						}
-						
-						//if no valid tag is found, just ignore the line
-						
-					}while(scanner.hasNextLine()); //check for lines
-					
-					//check for wads paths
-					if(str.trim().equalsIgnoreCase(WADS_LABEL) && scanner.hasNextLine()) inner3: do
-					{   //entering presets paths reading mode
-						str = scanner.nextLine();
-						
-						if(str.startsWith("@"))
-						{
-							pathsToSearchForWads.add(str.substring(1));
-						}
-						
-						//if no session info is found, check for main tags and break when it is
-						else for(String s : INI_TAGS)
-						{
-							if(str.equalsIgnoreCase(s))
-							{
-								isTagInStr = true;
-								break inner3;
-							}
-						}
-						
-						//if no valid tag is found, just ignore the line
-						
-					}while(scanner.hasNextLine()); //check for lines
-					
-					if(str.trim().equalsIgnoreCase(ENGINES_LABEL) && scanner.hasNextLine()) inner4: do
-					{
-						str = scanner.nextLine();
-						
-						if(str.trim().startsWith(ENGINE_TAG+' ') && str.contains(":"))
-						{
-							if( str.trim().length() == ENGINE_TAG.length()+2 ) continue;
-							
-							String code = str.trim().substring(str.trim().indexOf(' ')+1, str.trim().lastIndexOf(':'));
-							
-							if( ! scanner.hasNextLine()) continue;
-							str = scanner.nextLine();
-							if( ! str.trim().startsWith(ENGINE_NAME_TAG) && str.contains("=")) continue;
-							String name = str.trim().substring(str.trim().indexOf('=')+1);
-							
-							if( ! scanner.hasNextLine()) continue;
-							str = scanner.nextLine();
-							if( ! str.trim().startsWith(ENGINE_EXECPATH_TAG) && str.contains("=")) continue;
-							String execpath = str.trim().substring(str.trim().indexOf('=')+1);
-							
-							if( ! scanner.hasNextLine()) continue;
-							str = scanner.nextLine();
-							if( ! str.trim().startsWith(ENGINE_IMGPATH_TAG) && str.contains("=")) continue;
-							String img = str.trim().substring(str.trim().indexOf('=')+1);
-							if(img.trim().equalsIgnoreCase("null")) img = null;
-							
-							customEngines.add(new EngineInfo(name, code, execpath, img) );
-						}
-						
-						//if no session info is found, check for main tags and break when it is
-						else for(String s : INI_TAGS)
-						{
-							if(str.equalsIgnoreCase(s))
-							{
-								isTagInStr = true;
-								break inner4;
-							}
-						}
-						
-						//if no valid tag is found, just ignore the line
-						
-					}while(scanner.hasNextLine()); //check for lines
-				}
-			}
-			catch(FileNotFoundException e) {JOptionPane.showConfirmDialog(null, "FILE PASSES EXISTENCE TEST AND CANT BE FOUND!\n THIS IS NOT SUPPOSED TO HAPPEN!", "ERROR!", JOptionPane.ERROR_MESSAGE);}
-		}
-	
-			
+		w.write("\n");
+		for(String path : pathsToSearchForWads) if(path.equals(".")==false)
+			w.write(SESSION_WAD_PATH + "=" + path+"\n");
+		
+		w.close();
 	}
 	
-	//Copy constructor
-	public Settings(Settings jo)
+	public static final String
+		ENGINE_CONFIGS_FOLDER = "configs/",
+		ENGINE_ID = "id",
+		ENGINE_NAME = "name",
+		ENGINE_COMMAND = "command",
+		ENGINE_ICON = "icon";
+	
+	private EngineInfo parseEngine(File file) throws FileNotFoundException, IOException
 	{
-		this.window_size_x = jo.window_size_x;
-		this.window_size_y = jo.window_size_y;
-		this.pathsToSearchForPresets = new ArrayList<String>(jo.pathsToSearchForPresets);
-		this.pathsToSearchForWads = new ArrayList<String>(jo.pathsToSearchForWads);
+		FileInputStream fis = new FileInputStream(file);
+		Properties p = new Properties();
+		p.load(fis);
+		fis.close();
+		
+		if(p.getProperty(ENGINE_ID)==null || p.getProperty(ENGINE_NAME)==null || p.getProperty(ENGINE_COMMAND)==null )
+		{
+			System.out.println("Ignoring incomplete properties: "+file.getName());
+			return null;
+		}
+		
+		return new EngineInfo(p.getProperty(ENGINE_NAME), p.getProperty(ENGINE_ID), p.getProperty(ENGINE_COMMAND), p.getProperty(ENGINE_ICON));
 	}
 	
-	public void saveOptionsToFile()
+	private void storeEngine(EngineInfo ei) throws IOException
 	{
-		//TODO save other info
-		
-		File file = new File(OPTIONS_FILE);
-		
-		if(file.exists())
-		{
-			if(file.isFile())
-			{
-				if(!file.canWrite())
-				{
-					JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application is not allowed to write to file "+OPTIONS_FILE, "Saving options error!", JOptionPane.ERROR_MESSAGE);
-					return;
-				}
-			}
-			else 
-			{
-				JOptionPane.showConfirmDialog(null, "A folder with named \""+OPTIONS_FILE+"\" exists in the same folder!\n" +
-						" Can't save options to file! Delete or rename the folder to save!", "Naming error!", JOptionPane.ERROR_MESSAGE);
-				return;
-			}
-		}
-		else try
-		{
+		Properties p = new Properties();
+		p.setProperty(ENGINE_ID, ei.code);
+		p.setProperty(ENGINE_NAME, ei.name);
+		p.setProperty(ENGINE_COMMAND, ei.executablePath);
+		p.setProperty(ENGINE_ICON, ei.iconFileName);
+		File file = new File(ENGINE_CONFIGS_FOLDER + ei.code.toLowerCase() + ".properties");
+		if(file.exists()==false)
 			file.createNewFile();
-		}
-		catch (IOException e) 
+		else if(file.isDirectory())
 		{
-			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application could not create file "+OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
+			System.out.println("Can't save properties for engine "+ei.code+": a folder with the same name exists!");
 			return;
 		}
-		
-		FileWriter fw;
-		
-		try
-		{
-			fw = new FileWriter(file);
-		}
-		catch (IOException e) 
-		{
-			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: application could not write to file "+OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-		
-		//writing to an text file
-		try
-		{	
-			//writing session options
-			fw.write(SESSION_LABEL+'\n');
-			fw.write(SESSION_ALERTUSERDIFFENGINE+'='+alertIncompEngine+'\n');
-			fw.write(SESSION_USEOSLOOKANDFEEL+'='+useOSLF+'\n');
-			fw.write(SESSION_USEOGLGUI+'='+useOGLgui+'\n');
-			fw.write(SESSION_SHOWAUXCONSOLE+'='+showAuxConsole+'\n');
-			fw.write(SESSION_LASTVISITEDFOLDER+'='+lastVisitedFolder+'\n');
-			fw.write(SESSION_LASTWINDOWSIZE_X+'='+window_size_x+'\n');
-			fw.write(SESSION_LASTWINDOWSIZE_Y+'='+window_size_y+'\n');
-			fw.write(SESSION_MAINSPLITPANE_POS+'='+mainsplitpane_pos+'\n');
-			fw.write(SESSION_SUBSPLITPANE_POS+'='+subsplitpane_pos+'\n');
-			
-			//writing wads paths
-			fw.write('\n'+WADS_LABEL+'\n');
-			for(String str : pathsToSearchForWads) if( !str.equals(".") ) fw.write('@'+str+'\n');
-			
-			//writing presets paths
-			fw.write('\n'+PRESETS_LABEL+'\n');
-			for(String str : pathsToSearchForPresets) if( !str.equals(".") ) fw.write('@'+str+'\n');
-			
-			//writing custom engines info
-			fw.write('\n'+ENGINES_LABEL+'\n');
-			for(EngineInfo ei : customEngines) 
-			{
-				fw.write(ENGINE_TAG + " " +ei.code+':'+'\n');
-				fw.write(ENGINE_NAME_TAG+'='+ei.name+'\n');
-				fw.write(ENGINE_EXECPATH_TAG+'='+ei.executablePath+'\n');
-				fw.write(ENGINE_IMGPATH_TAG+'='+(ei.iconFileName==null?"null":ei.iconFileName)+'\n'+'\n');
-			}
-			
-			fw.close();
-		}
-		catch(IOException e)
-		{
-			JOptionPane.showConfirmDialog(null, "Could not save options to file! \nError: I/O error while writing to file "+OPTIONS_FILE+"\n"+e.getLocalizedMessage(), "Saving options error!", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
-		//end writing text file
+		FileOutputStream fos = new FileOutputStream(file);
+		p.store(fos, "avocadoom engine config v2");
+		fos.close();
 	}
 	
-}
+	private void parseEngines() throws Exception
+	{
+		File configPath = new File(ENGINE_CONFIGS_FOLDER);
+		if(configPath.isDirectory()==false)
+			throw new Exception(ENGINE_CONFIGS_FOLDER+" folder is missing!");
+		
+		for(File f : configPath.listFiles())
+		{
+			if(f.isFile() && f.getName().endsWith(".properties"))
+				try{
+					customEngines.add(parseEngine(f));
+				}catch (IOException e) {
+					System.out.println("ignoring corrupt file \""+f.getName()+"\": "+e.getLocalizedMessage());
+				}
+		}
+	}
+	
+	private void storeEngines()
+	{
+		for(EngineInfo ei : customEngines)
+		{
+			try {
+				storeEngine(ei);
+			} catch (IOException e) 
+			{
+				System.out.println("error while saving engine properties for "+ei.code+":"+e.getLocalizedMessage());
+			}
+		}
+	}
 
+}

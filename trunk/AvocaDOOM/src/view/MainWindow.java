@@ -29,6 +29,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -480,7 +481,9 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		options.window_size_y = window.getHeight();
 		options.mainsplitpane_pos = splitPane_main.getDividerLocation();
 		options.subsplitpane_pos = splitPane_sub.getDividerLocation();
-		options.saveOptionsToFile();
+		try {	options.store();	} 
+		catch (IOException e) 
+		{	JOptionPane.showMessageDialog(window, e.getLocalizedMessage(), "Error!", JOptionPane.ERROR_MESSAGE);	}
 	}
 	
 	@Override

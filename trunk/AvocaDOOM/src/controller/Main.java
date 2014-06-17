@@ -20,6 +20,9 @@
  */
 package controller;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
 import javax.swing.JOptionPane;
 
 import util.UIManager2;
@@ -51,6 +54,17 @@ public class Main {
 	public static void main(String[] args) 
 	{	
 		Settings settings = new Settings();
+		try 
+		{
+			settings.load();
+		} catch (FileNotFoundException e1) {
+			JOptionPane.showMessageDialog(null, "No settings file found. Use default settings.", "Oops!", JOptionPane.WARNING_MESSAGE);
+		} catch (IOException e1) {
+			JOptionPane.showMessageDialog(null, "Error while loading settings: "+e1.getLocalizedMessage(), "Error!", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(null, e1.getLocalizedMessage(), "Fatal error!", JOptionPane.ERROR_MESSAGE);
+			System.exit(-1);
+		}
 		
 		if(settings.useOGLgui)
 			System.setProperty("sun.java2d.opengl","true"); //fix some visual artifacts
