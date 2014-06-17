@@ -59,6 +59,7 @@ public class Preset
 		name = p.getProperty(PRESET_NAME_TAG);
 		description = p.getProperty(PRESET_DESC_TAG);
 		imagePath = p.getProperty(PRESET_IMGPATH_TAG);
+		engines = new ArrayList<String>();
 		for(String s : p.getProperty(PRESET_ENGINES_TAG).split(","))
 			engines.add(s.trim());
 		
@@ -91,6 +92,7 @@ public class Preset
 	{
 		Scanner scan = new Scanner(file);
 		
+		mods = new ArrayList<Mod>();
 		while(scan.hasNextLine())
 		{
 			String line = scan.nextLine();
