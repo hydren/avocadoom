@@ -69,6 +69,17 @@ public class Mod
 		return filesToShow;
 	}
 	
+	public static synchronized final boolean isValidMod(String filename)
+	{
+		File file = new File(filename);
+		if( file.isFile() && ( 
+				file.getName().toLowerCase().endsWith(".wad") //needs toLowerCase because sometimes people use .WAD instead of .wad 
+			||  file.getName().toLowerCase().endsWith(".pk3") 
+			||  file.getName().toLowerCase().endsWith(".pk7") 
+		)) return true; 
+		else return false;
+	}
+	
 	public static synchronized final boolean isValidMod(File file)
 	{
 		if( file.isFile() && ( 
