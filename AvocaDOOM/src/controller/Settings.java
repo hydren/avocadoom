@@ -175,13 +175,13 @@ public class Settings
 			if(line.trim().startsWith(SESSION_PRESET_PATH) && line.contains("=") && line.indexOf('=') != line.length()-1)
 			{
 				String tmp = line.substring(line.indexOf('=')+1).trim();
-				if( !tmp.isEmpty() && new File(tmp).isFile() )
+				if( !tmp.isEmpty() && new File(tmp).isDirectory() )
 					pathsToSearchForPresets.add(tmp);
 			}
 			else if(line.trim().startsWith(SESSION_WAD_PATH) && line.contains("=") && line.indexOf('=') != line.length()-1)
 			{
 				String tmp = line.substring(line.indexOf('=')+1).trim();
-				if( !tmp.isEmpty() && new File(tmp).isFile() )
+				if( !tmp.isEmpty() && new File(tmp).isDirectory() )
 					pathsToSearchForWads.add(tmp);
 			}
 		}
