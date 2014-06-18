@@ -31,9 +31,6 @@ public class Settings
 	/** Flag to indicate whether is to alert if the user is running an preset not set as compatible with the chosen engine. */
 	public boolean alertIncompEngine;
 	
-	/** Flag to indicate whether the app should use the OS look and feel. */
-	public boolean useOSLF;
-	
 	/** Flag to indicate whether to show an auxiliary console window with the engine's output. */
 	public boolean showAuxConsole;
 	
@@ -58,6 +55,9 @@ public class Settings
 	/** Last selected engine in main window's combo box. */
 	public String lastSelectedEngine;
 	
+	/** Look & Feel to use on the app's Swing GUI. */
+	public String appLookAndFeel;
+	
 	// === file parsing static fields
 	
 	public static final String 
@@ -66,11 +66,11 @@ public class Settings
 		SESSION_MAINSPLITPANE_POS = "mainsplitpane_pos",
 		SESSION_SUBSPLITPANE_POS = "subsplitpane_pos",
 		SESSION_ALERTUSERDIFFENGINE="alertuserdiffengine",
-		SESSION_USEOSLOOKANDFEEL="useoslf",
 		SESSION_USEOGLGUI="useoglgui",
 		SESSION_SHOWAUXCONSOLE="showauxconsole",
 		SESSION_LASTVISITEDFOLDER="lastvisitedfolder",
 		SESSION_LASTSELECTEDCENGINE="lastselectedengine",
+		SESSION_LOOKANDFEEL="lookandfeel",
 		
 		SESSION_MAXIMIZED="maximized"; //NOT IMPLEMENTED, TODO
 	
@@ -85,7 +85,6 @@ public class Settings
 		subsplitpane_pos = 100;
 		lastVisitedFolder="";
 		alertIncompEngine = true;
-		useOSLF = true;
 		useOGLgui = false;
 		showAuxConsole = !System.getProperty("os.name").equalsIgnoreCase("Windows");
 		pathsToSearchForPresets = new ArrayList<String>();
@@ -94,6 +93,7 @@ public class Settings
 		pathsToSearchForWads.add(".");
 		customEngines = new ArrayList<EngineInfo>();
 		lastSelectedEngine = null;
+		appLookAndFeel = "system";
 	}
 	
 	public void load() throws FileNotFoundException, IOException, Exception
@@ -137,10 +137,6 @@ public class Settings
 			alertIncompEngine = Boolean.parseBoolean(tmp);
 		
 		tmp=null;
-		if((tmp = p.getProperty(SESSION_USEOSLOOKANDFEEL)) != null)
-			useOSLF = Boolean.parseBoolean(tmp);
-		
-		tmp=null;
 		if((tmp = p.getProperty(SESSION_USEOGLGUI)) != null)
 			useOGLgui = Boolean.parseBoolean(tmp);
 		
@@ -152,6 +148,9 @@ public class Settings
 		if((tmp = p.getProperty(SESSION_LASTSELECTEDCENGINE)) != null)
 			lastSelectedEngine = tmp;
 		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_LOOKANDFEEL)) != null)
+			appLookAndFeel = tmp;
 	}
 	
 	public void store() throws FileNotFoundException, IOException
@@ -163,10 +162,10 @@ public class Settings
 		p.setProperty(SESSION_SUBSPLITPANE_POS, subsplitpane_pos+"");
 		p.setProperty(SESSION_LASTVISITEDFOLDER, lastVisitedFolder+"");
 		p.setProperty(SESSION_ALERTUSERDIFFENGINE, alertIncompEngine+"");
-		p.setProperty(SESSION_USEOSLOOKANDFEEL, useOSLF+"");
 		p.setProperty(SESSION_USEOGLGUI, useOGLgui+"");
 		p.setProperty(SESSION_SHOWAUXCONSOLE, showAuxConsole+"");
 		p.setProperty(SESSION_LASTSELECTEDCENGINE, lastSelectedEngine);
+		p.setProperty(SESSION_LOOKANDFEEL, appLookAndFeel);
 		FileOutputStream fos = new FileOutputStream(SETTINGS_FILE);
 		p.store(fos, "avocadoom settings v2");
 		fos.close();

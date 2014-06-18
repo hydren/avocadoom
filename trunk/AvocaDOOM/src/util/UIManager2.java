@@ -16,15 +16,15 @@ public abstract class UIManager2 extends UIManager
 		if(lookAndFeelName == null)
 			return;
 		
-		if(lookAndFeelName.equalsIgnoreCase("System"))
+		if(lookAndFeelName.equalsIgnoreCase("system"))
 		{
 			String sysThemeClassName = UIManager.getSystemLookAndFeelClassName();
 
 			//special case for gtk+ interfaced linux
 			String os_name = System.getProperty("os.name");
-			if(os_name != null && os_name.equalsIgnoreCase("Linux"))
+			if(os_name != null && os_name.equalsIgnoreCase("linux"))
 				for(LookAndFeelInfo lfi : UIManager.getInstalledLookAndFeels())
-					if(lfi.getName().equalsIgnoreCase("GTK+"))
+					if(lfi.getName().equalsIgnoreCase("gtk+"))
 					{
 						sysThemeClassName = lfi.getClassName();
 						break;

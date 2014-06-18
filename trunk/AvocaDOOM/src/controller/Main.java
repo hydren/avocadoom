@@ -69,9 +69,9 @@ public class Main {
 		if(settings.useOGLgui)
 			System.setProperty("sun.java2d.opengl","true"); //fix some visual artifacts
 		
-		if(settings.useOSLF) try //TO FORCE TO USE THE SYSTEM LOOK & FEEL 
+		try
 		{
-			UIManager2.setLookAndFeelByName("System");
+			UIManager2.setLookAndFeelByName(settings.appLookAndFeel);
 		} 
 		catch (Exception e) 
 		{
