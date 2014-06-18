@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
 
@@ -487,6 +488,7 @@ public class SettingsDialog extends JDialog implements ActionListener
 			{
 				dialog.resultingInfo.modified = true;
 				customEngines.add(dialog.resultingInfo);
+				Collections.sort(customEngines, EngineInfo.COMPARATOR);
 			}
 		}
 		else if(e.getSource().equals(btnEditCustomEngine) && customEnginesJlist.getSelectedValue()!=null)
@@ -496,6 +498,7 @@ public class SettingsDialog extends JDialog implements ActionListener
 			{
 				dialog.resultingInfo.modified = true;
 				customEngines.set( customEnginesJlist.getSelectedIndex(), dialog.resultingInfo);
+				Collections.sort(customEngines, EngineInfo.COMPARATOR);
 			}
 		}
 		else if(e.getSource().equals(btnRemoveCustomEngine) && customEnginesJlist.getSelectedValue()!=null)
