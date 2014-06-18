@@ -188,6 +188,11 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		
 		//the combo box use the structure internally, so we need to pass a new, independent vector to it, so it doesnt screw with our data
 		comboBox = new JComboBox(new Vector<EngineInfo>(options.customEngines));
+		for(EngineInfo ei : options.customEngines)	if(ei.code.equalsIgnoreCase(options.lastSelectedEngine))
+		{
+			comboBox.setSelectedItem(ei);
+			break;
+		}
 		comboBox.addActionListener(this);
 		
 		lblSelectedEnginePic = new JLabel("");
@@ -319,6 +324,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 				comboBox.addItem(ei);
 			
 			comboBox.setSelectedItem(previousSelected);
+			options.lastSelectedEngine = ((EngineInfo) comboBox.getSelectedItem()).code;
 		}
 		
 		else if( arg0.getSource().equals(comboBox) )
@@ -328,6 +334,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 				if( ((EngineInfo) comboBox.getSelectedItem()).iconFileName != null && new File(((EngineInfo) comboBox.getSelectedItem()).iconFileName).isFile() )
 				lblSelectedEnginePic.setIcon( new ImageIcon( ((EngineInfo) comboBox.getSelectedItem()).iconFileName ) );
 				else lblSelectedEnginePic.setIcon( new ImageIcon("image/engine.png") );
+				options.lastSelectedEngine = ((EngineInfo) comboBox.getSelectedItem()).code;
 			}
 		}
 		
@@ -344,7 +351,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 			{
 				content_jlist.setListData(new Vector<Mod>(Mod.getAllAvailableMods(options)));
 				lblPresetInfo.setText("All wads");
-				lblPresetName.setText( "All wads");
+				lblPresetName.setText("All wads");
 				lblPresetDescription.setText("");
 				lblPresetFilename.setText("");
 				lblPresetimage.setIcon(null);
