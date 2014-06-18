@@ -30,8 +30,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -54,7 +52,6 @@ import model.EngineInfo;
 import model.Preset;
 import util.UIManager2;
 import controller.Settings;
-import exceptions.FileAlreadyExistsException;
 
 public class SettingsDialog extends JDialog implements ActionListener
 {
