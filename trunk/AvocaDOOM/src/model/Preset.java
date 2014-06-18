@@ -18,8 +18,8 @@ import exceptions.InvalidPresetException;
 public class Preset 
 {
 	public File file;
-	public String name, description, imagePath;
-	public List<String> engines = new ArrayList<String>();;
+	public String name="<unnamed preset>", description="<no description>", imagePath=null;
+	public List<String> engines = new ArrayList<String>();
 	public List<Mod> mods = new ArrayList<Mod>();
 	
 	public Preset(File file) throws FileNotFoundException, IOException, InvalidPresetException
@@ -158,7 +158,8 @@ public class Preset
 		p.store();
 	}
 	
-	public static synchronized final boolean isValidPreset(File file) throws IOException
+	public static synchronized final 
+	boolean isValidPreset(File file) throws IOException
 	{
 		if(file == null) return false;
 		
@@ -190,8 +191,124 @@ public class Preset
 		return true; //TODO add further validation
 	}
 	
-	//TODO
-	//convert old presets to new format
+	@Deprecated
+	public static
+	Preset loadOldFormatPreset(File file) throws FileNotFoundException, Exception
+	{
+		Preset p = new Preset();
+		p.file = file;
+		//starts a scanner for the file
+		Scanner scanner1 = new Scanner(file);
+		
+		//if file is not empty, start parsing
+		if(scanner1.hasNextLine())
+		{	
+			//file needs to present this label for validation
+			if(scanner1.nextLine().equalsIgnoreCase("[JAGGERY_PRESET]") )
+			{
+				String str=null;
+				
+				//needed when a token is accidently already in str variable
+				boolean alreadyRead = false;
+				
+				while(scanner1.hasNextLine())
+				{
+					//needed when a token is accidently already in str variable
+					if( ! alreadyRead ) str = scanner1.nextLine();
+					else alreadyRead = false;
+					
+					//label WADS found. Read a sequence of '@' prefixed paths
+					if(str.equalsIgnoreCase("[WADS]"))
+					{
+						while(scanner1.hasNextLine())
+						{
+							str = scanner1.nextLine();
+							if(str.startsWith("@"))
+							{
+								p.mods.add(new Mod(str.substring(1)));
+							}
+							// it is another label found, need to set the alreadyRead flag because the label is already on the str variable
+							else if( str.startsWith("[") ) 
+							{
+								alreadyRead = true;
+								break;
+							}
+							else
+							{
+								//should I throw an exception???
+							}
+						}
+					}
+					
+					//label INFO found, read simple data
+					if(str.equalsIgnoreCase("[INFO]"))
+					{
+						while(scanner1.hasNextLine())
+						{
+							str = scanner1.nextLine();
+							
+							if(str.trim().startsWith(PRESET_NAME_TAG) && str.contains("="))
+							{
+								p.name = str.substring(str.indexOf('=')+1).trim();
+							}
+							else if(str.trim().startsWith(PRESET_DESC_TAG) && str.contains("="))
+							{
+								p.description = str.substring(str.indexOf('=')+1).trim();
+							}
+							else if(str.trim().startsWith(PRESET_IMGPATH_TAG) && str.contains("="))
+							{
+								p.imagePath = str.substring(str.indexOf('=')+1).trim();
+							}
+							else if(str.trim().startsWith(PRESET_ENGINES_TAG) && str.contains("="))
+							{
+								String[] parts = str.substring(str.indexOf('=')+1).trim().split(",");
+								for(String s : parts) if( ! s.trim().equals("") ) p.engines.add( s.trim() );
+							}
+							// it is another label found, need to set the alreadyRead flag because the label is already on the str variable
+							else if( str.startsWith("[") ) 
+							{
+								alreadyRead = true;
+								break;
+							}
+							else
+							{
+								//should I throw an exception???
+							}
+						}
+					}
+				}
+				scanner1.close();
+				scanner1=null;
+				System.gc();
+			}
+			else throw new Exception("Invalid preset file \""+file.getName()+"\"! (at load() method)");	
+		}
+		else throw new Exception("Empty preset file \""+file.getName()+"\"! (at load() method)");
+		
+		return p;
+	}
 	
+	@Deprecated
+	public static synchronized final 
+	boolean isValidOldPreset(File file) throws FileNotFoundException
+	{
+		if(file == null) return false;
+			
+		if( file.getName().toLowerCase().endsWith(".txt") ) //needs toLowerCase because sometimes people save as .TXT
+		{
+			Scanner scanner1 = new Scanner(file);
+			if(scanner1.hasNextLine()) if(scanner1.nextLine().equalsIgnoreCase("[JAGGERY_PRESET]")) 
+			{
+				scanner1.close();
+				scanner1=null;
+				System.gc();
+				return true;
+			}
+			scanner1.close();
+			scanner1=null;
+			System.gc();
+		}
+		return false;
+	}
 	
 }
