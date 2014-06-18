@@ -30,6 +30,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -48,15 +51,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import model.EngineInfo;
+import model.Preset;
 import util.UIManager2;
 import controller.Settings;
+import exceptions.FileAlreadyExistsException;
 
-public class SettingsDialog extends JDialog implements ActionListener{
-
-	/**
-	 * 
-	 */
+public class SettingsDialog extends JDialog implements ActionListener
+{
 	private static final long serialVersionUID = -5095508074515360521L;
+
 	JList wadPk3JList, presetsJList;
 	JButton btnApply, btnCancel;
 	JButton btnAddEntryWadPk3, btnAddbrowseWadPk3, btnEditWadPk3, btnRemoveWadPk3;
@@ -80,6 +83,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 	private JCheckBox chckbxAlertWhenLaunching;
 	private JCheckBox chckbxShowAConsole;
 	private JCheckBox chckbxUseOpenglRender;
+	private JButton btnImportOld;
 	
 	public SettingsDialog(Settings options, JFrame owner)
 	{	
@@ -293,6 +297,20 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		btnRemoveCustomEngine.setBounds(7, 120, 90, 34);
 		btnRemoveCustomEngine.addActionListener(this);
 		panel_engineButtons.add(btnRemoveCustomEngine);
+		
+		JPanel panelMisc = new JPanel();
+		tabbedPane.addTab("Misc.", null, panelMisc, null);
+		panelMisc.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 5));
+		
+		JPanel panelConvert = new JPanel();
+		panelMisc.add(panelConvert);
+		
+		JLabel lblImport = new JLabel("Convert old presets to new format:");
+		panelConvert.add(lblImport);
+		
+		btnImportOld = new JButton("Choose");
+		btnImportOld.addActionListener(this);
+		panelConvert.add(btnImportOld);
 			
 		
 		panel = new JPanel();
@@ -314,6 +332,7 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		setVisible(true);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
@@ -470,6 +489,65 @@ public class SettingsDialog extends JDialog implements ActionListener{
 		else if(e.getSource().equals(btnRemoveCustomEngine) && customEnginesJlist.getSelectedValue()!=null)
 		{
 			customEngines.remove(customEnginesJlist.getSelectedIndex());
+		}
+		
+		//MISC BUTTONS
+		
+		else if(e.getSource() == btnImportOld)
+		{
+			ArrayList<Preset> converted = new ArrayList<Preset>();
+			JFileChooser chooser = new JFileChooser(original.lastVisitedFolder);
+			chooser.setApproveButtonText("Choose");
+			chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			chooser.setMultiSelectionEnabled(true);
+			int state = chooser.showOpenDialog(this);
+			if(state == JFileChooser.APPROVE_OPTION)
+			{
+				File[] filesToConvert = chooser.getSelectedFiles();
+				for(File f : filesToConvert)
+				{
+					try {
+						if(Preset.isValidOldPreset(f))
+							converted.add( Preset.loadOldFormatPreset(f) );
+						
+						else
+							JOptionPane.showMessageDialog(this, "Invalid file \""+f.getName()+"\". Ignoring...", "Oops", JOptionPane.WARNING_MESSAGE);
+
+					} catch (Exception e1) 	{
+						JOptionPane.showMessageDialog(this, "Problem with file \""+f.getName()+"\". Ignoring...", "Oops", JOptionPane.WARNING_MESSAGE);
+					}
+				}
+			}
+			else return;
+			
+			if(converted.size()==0)
+			{
+				JOptionPane.showMessageDialog(this, "No valid presets were found.");
+				return;
+			}
+			
+			state = JOptionPane.showConfirmDialog(this, converted.size()+" presets were found.\nDo you want to override the older preset files? Press NO to create new copies.", "Convert old presets", JOptionPane.YES_NO_CANCEL_OPTION);
+			
+			if(state == JOptionPane.CANCEL_OPTION)
+				return;
+			
+			if(state == JOptionPane.NO_OPTION)
+				for(Preset p : converted)
+					p.file = new File(p.file.getPath().substring(0, p.file.getPath().lastIndexOf(File.separator)+1) + "converted_"+p.file.getName());
+			
+			int succeeded_count=0;
+			for(Preset p : converted)
+			{
+				try {
+					Preset.createAndSave(p.file, p.name, p.description, p.imagePath, p.engines, p.mods, true);
+					++succeeded_count;
+				} catch (Exception e1) 	{
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(this, "Problem saving file \""+p.file.getPath()+"\"\n"+e1.getLocalizedMessage()+"\nIgnoring...", "Oops", JOptionPane.WARNING_MESSAGE);
+				}
+			}
+			
+			JOptionPane.showMessageDialog(this, succeeded_count+" presets converted successfully!", "Done", JOptionPane.INFORMATION_MESSAGE);
 		}
 		
 		wadPk3JList.setListData(pathsToSearchForWads);
