@@ -55,6 +55,9 @@ public class Settings
 	/** Position of the sub/second splitpane, from the main window. */
 	public int subsplitpane_pos;
 	
+	/** Last selected engine in main window's combo box. */
+	public String lastSelectedEngine;
+	
 	// === file parsing static fields
 	
 	public static final String 
@@ -67,6 +70,7 @@ public class Settings
 		SESSION_USEOGLGUI="useoglgui",
 		SESSION_SHOWAUXCONSOLE="showauxconsole",
 		SESSION_LASTVISITEDFOLDER="lastvisitedfolder",
+		SESSION_LASTSELECTEDCENGINE="lastselectedengine",
 		
 		SESSION_MAXIMIZED="maximized"; //NOT IMPLEMENTED, TODO
 	
@@ -89,6 +93,7 @@ public class Settings
 		pathsToSearchForWads = new ArrayList<String>();
 		pathsToSearchForWads.add(".");
 		customEngines = new ArrayList<EngineInfo>();
+		lastSelectedEngine = null;
 	}
 	
 	public void load() throws FileNotFoundException, IOException, Exception
@@ -143,6 +148,10 @@ public class Settings
 		if((tmp = p.getProperty(SESSION_SHOWAUXCONSOLE)) != null)
 			showAuxConsole = Boolean.parseBoolean(tmp);
 		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_LASTSELECTEDCENGINE)) != null)
+			lastSelectedEngine = tmp;
+		
 	}
 	
 	public void store() throws FileNotFoundException, IOException
@@ -157,6 +166,7 @@ public class Settings
 		p.setProperty(SESSION_USEOSLOOKANDFEEL, useOSLF+"");
 		p.setProperty(SESSION_USEOGLGUI, useOGLgui+"");
 		p.setProperty(SESSION_SHOWAUXCONSOLE, showAuxConsole+"");
+		p.setProperty(SESSION_LASTSELECTEDCENGINE, lastSelectedEngine);
 		FileOutputStream fos = new FileOutputStream(SETTINGS_FILE);
 		p.store(fos, "avocadoom settings v2");
 		fos.close();
