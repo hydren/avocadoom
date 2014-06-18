@@ -4,7 +4,7 @@ TODO list
 
 Features:
 - Create presets from selecting mods at main window (using right-click and/or a button)
-- Offer old gpl theme
+- Create a way to choose icon themes
 - Launch more than one preset together
 - Create presets from other presets' mods
 - Create presets made up other presets (really painfull to do)
