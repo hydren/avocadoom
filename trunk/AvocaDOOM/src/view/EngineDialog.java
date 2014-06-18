@@ -23,6 +23,7 @@ package view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -32,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
+import controller.Settings;
 import model.EngineInfo;
 
 public class EngineDialog extends JDialog implements ActionListener
@@ -46,6 +48,7 @@ public class EngineDialog extends JDialog implements ActionListener
 	private JTextField txtEngineName, txtEngineCode, txtExecutablePath, textFieldImagePath;
 	private JButton btnButtonnavigate, btnImagepath, btnOk, btnCancel;
 	private JLabel lblImagepreview;
+	private File file=null;
 	
 	EngineInfo resultingInfo;
 
@@ -96,7 +99,7 @@ public class EngineDialog extends JDialog implements ActionListener
 		getContentPane().add(lblCode);
 		
 		JLabel lblExecutablePathcommandLine = new JLabel("Executable path/command line:");
-		lblExecutablePathcommandLine.setBounds(12, 77, 218, 16);
+		lblExecutablePathcommandLine.setBounds(12, 77, 240, 16);
 		getContentPane().add(lblExecutablePathcommandLine);
 		
 		txtExecutablePath = new JTextField();
@@ -115,7 +118,7 @@ public class EngineDialog extends JDialog implements ActionListener
 		getContentPane().add(lblImageoptional);
 		
 		textFieldImagePath = new JTextField();
-		textFieldImagePath.setBounds(121, 130, 261, 26);
+		textFieldImagePath.setBounds(142, 130, 240, 26);
 		getContentPane().add(textFieldImagePath);
 		textFieldImagePath.setColumns(10);
 		
@@ -142,6 +145,7 @@ public class EngineDialog extends JDialog implements ActionListener
 			txtEngineName.setText(engine.name);
 			txtExecutablePath.setText(engine.executablePath);
 			textFieldImagePath.setText(engine.iconFileName);
+			file = engine.file;
 		}
 		
 		
@@ -162,8 +166,7 @@ public class EngineDialog extends JDialog implements ActionListener
 		else if(event.getSource().equals(this.btnOk))
 		{
 			//TODO save all stuff
-			//options.engines.add(new EngineInfo( txtEngineCode.getText(), txtEngineName.getText(), txtExecutablePath.getText(), textFieldImagePath.getText() ) );
-			this.resultingInfo = new EngineInfo( txtEngineName.getText(), txtEngineCode.getText() , txtExecutablePath.getText(), textFieldImagePath.getText() ) ;
+			this.resultingInfo = new EngineInfo( txtEngineName.getText(), txtEngineCode.getText() , txtExecutablePath.getText(), textFieldImagePath.getText(), (file==null?new File(Settings.ENGINE_CONFIGS_FOLDER+txtEngineCode.getText().toLowerCase()+".properties"):file));
 			this.dispose();
 		}
 		
