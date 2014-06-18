@@ -394,6 +394,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 						if( ei.code.equalsIgnoreCase(str) )
 						{
 							JLabel label = new JLabel(ei.code);
+							label.setToolTipText(ei.name+" - "+ei.executablePath);
 							if( ei.iconFileName != null && new File(ei.iconFileName).isFile() )
 								label.setIcon(new ImageIcon(ei.iconFileName) );
 							else label.setIcon( new ImageIcon("image/engine.png") );
@@ -409,8 +410,9 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 						label.setIcon( new ImageIcon("image/unknown.png") );
 						panelEngineJLabels.add(label);
 					}
-					
 				}
+				panelEngineJLabels.revalidate();
+				panelEngineJLabels.repaint();
 			}
 		}
 		
