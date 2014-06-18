@@ -9,7 +9,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Properties;
 import java.util.Scanner;
@@ -97,13 +96,7 @@ public class Settings
 		parseEngines();
 		parsePaths();
 		
-		Collections.sort(customEngines, new Comparator<EngineInfo>() 
-		{
-			@Override
-			public int compare(EngineInfo o1, EngineInfo o2) {
-				return o1.code.compareTo(o2.code);
-			}
-		});
+		Collections.sort(customEngines, EngineInfo.COMPARATOR);
 		
 		FileInputStream fis = new FileInputStream(SETTINGS_FILE);
 		Properties p = new Properties();
