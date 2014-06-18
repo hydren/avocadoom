@@ -56,6 +56,8 @@ import model.Mod;
 import model.Preset;
 import controller.Main;
 import controller.Settings;
+import java.awt.Font;
+import javax.swing.border.EmptyBorder;
 
 public class MainWindow implements ActionListener, ListSelectionListener, WindowListener
 {
@@ -77,6 +79,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 	private Component horizontalGlue_1;
 	private JSplitPane splitPane_main;
 	private JSplitPane splitPane_sub;
+	private JLabel lblCompatibleEngines;
 	
 	public MainWindow(Settings options) 
 	{
@@ -100,15 +103,25 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		infoPanel.add(lblPresetimage);
 		
 		lblPresetName = new JLabel("Preset name");
+		lblPresetName.setBorder(new EmptyBorder(6, 0, 4, 0));
+		lblPresetName.setFont(new Font("Dialog", Font.BOLD, 14));
 		infoPanel.add(lblPresetName);
 		
 		lblPresetDescription = new JLabel("Preset description");
+		lblPresetDescription.setFont(new Font("Dialog", Font.PLAIN, 12));
 		infoPanel.add(lblPresetDescription);
 		
 		lblPresetFilename = new JLabel("Preset filename");
+		lblPresetFilename.setBorder(new EmptyBorder(4, 0, 4, 0));
+		lblPresetFilename.setFont(new Font("Dialog", Font.ITALIC, 11));
 		infoPanel.add(lblPresetFilename);
 		
+		lblCompatibleEngines = new JLabel("Compatible engines:");
+		lblCompatibleEngines.setBorder(new EmptyBorder(10, 0, 0, 0));
+		infoPanel.add(lblCompatibleEngines);
+		
 		scrollPane = new JScrollPane();
+		scrollPane.setBorder(new EmptyBorder(0, 0, 0, 5));
 		infoPanel.add(scrollPane);
 		
 		panelEngineJLabels = new JPanel();
@@ -212,6 +225,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		window.getContentPane().add(bottomToolBar, BorderLayout.SOUTH);
 		
 		lblPresetInfo = new JLabel("Preset info");
+		lblPresetInfo.setBorder(new EmptyBorder(2, 4, 2, 0));
 		bottomToolBar.add(lblPresetInfo);
 		
 		horizontalGlue_1 = Box.createHorizontalGlue();
@@ -349,9 +363,11 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 			//if(e.getFirstIndex() == 0) //means all pk3
 			if( ((JList) e.getSource()).getSelectedIndex() == 0) //means all pk3
 			{
+				content_jlist.setEnabled(true);
 				content_jlist.setListData(new Vector<Mod>(Mod.getAllAvailableMods(options)));
 				lblPresetInfo.setText("All wads");
 				lblPresetName.setText("All wads");
+				lblCompatibleEngines.setText("");
 				lblPresetDescription.setText("");
 				lblPresetFilename.setText("");
 				lblPresetimage.setIcon(null);
@@ -364,6 +380,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 				showPresetContent(preset);
 				lblPresetInfo.setText( preset.file.getName() + ", " + preset.mods.size() + " files included" );
 				lblPresetName.setText( preset.name);
+				lblCompatibleEngines.setText("Compatible engines:");
 				lblPresetDescription.setText(preset.description);
 				lblPresetFilename.setText(preset.file.getName());
 				lblPresetimage.setIcon(new ImageIcon(preset.imagePath));
@@ -435,6 +452,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 	
 	public void showPresetContent(Preset preset)
 	{
+		content_jlist.setEnabled(false);
 		if(preset != null)
 		{
 			try {
