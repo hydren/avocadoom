@@ -278,6 +278,8 @@ public class PresetDialog extends JDialog implements ActionListener
 		//update editing preset values
 		if(preset != null)
 		{	
+			setTitle("Edit a preset");
+			comboBox.setSelectedItem(preset.file.getPath().substring(0,preset.file.getPath().lastIndexOf(File.separator)));
 			//reload preset data, just to be safe
 			try 
 			{ 
