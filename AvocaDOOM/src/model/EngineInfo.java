@@ -20,16 +20,21 @@
  */
 package model;
 
+import java.io.File;
+
 public class EngineInfo 
 {
 	public String name, code, executablePath, iconFileName;
+	public boolean modified=false;
+	public File file;
 
-	public EngineInfo(String name, String code, String executablePath, String iconFileName) 
+	public EngineInfo(String name, String code, String executablePath, String iconFileName, File file) 
 	{
 		this.name = name;
 		this.code = code;
 		this.executablePath = executablePath;
 		this.iconFileName = iconFileName;
+		this.file = file;
 	}
 	
 	@Override

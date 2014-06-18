@@ -476,15 +476,24 @@ public class SettingsDialog extends JDialog implements ActionListener
 		else if(e.getSource().equals(btnAddCustomEngine))
 		{
 			EngineDialog dialog = new EngineDialog(this);
-			if (dialog.resultingInfo != null) customEngines.add(dialog.resultingInfo);
+			if (dialog.resultingInfo != null)
+			{
+				dialog.resultingInfo.modified = true;
+				customEngines.add(dialog.resultingInfo);
+			}
 		}
 		else if(e.getSource().equals(btnEditCustomEngine) && customEnginesJlist.getSelectedValue()!=null)
 		{
 			EngineDialog dialog = new EngineDialog(this, (EngineInfo) customEnginesJlist.getSelectedValue() );
-			if (dialog.resultingInfo != null) customEngines.set( customEnginesJlist.getSelectedIndex(), dialog.resultingInfo);
+			if (dialog.resultingInfo != null) 
+			{
+				dialog.resultingInfo.modified = true;
+				customEngines.set( customEnginesJlist.getSelectedIndex(), dialog.resultingInfo);
+			}
 		}
 		else if(e.getSource().equals(btnRemoveCustomEngine) && customEnginesJlist.getSelectedValue()!=null)
 		{
+			((EngineInfo) customEnginesJlist.getSelectedValue()).file.delete();
 			customEngines.remove(customEnginesJlist.getSelectedIndex());
 		}
 		

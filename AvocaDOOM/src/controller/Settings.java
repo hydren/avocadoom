@@ -223,7 +223,7 @@ public class Settings
 			return null;
 		}
 		
-		return new EngineInfo(p.getProperty(ENGINE_NAME), p.getProperty(ENGINE_ID), p.getProperty(ENGINE_COMMAND), p.getProperty(ENGINE_ICON));
+		return new EngineInfo(p.getProperty(ENGINE_NAME), p.getProperty(ENGINE_ID), p.getProperty(ENGINE_COMMAND), p.getProperty(ENGINE_ICON), file);
 	}
 	
 	private void storeEngine(EngineInfo ei) throws IOException
@@ -233,15 +233,14 @@ public class Settings
 		p.setProperty(ENGINE_NAME, ei.name);
 		p.setProperty(ENGINE_COMMAND, ei.executablePath);
 		p.setProperty(ENGINE_ICON, ei.iconFileName);
-		File file = new File(ENGINE_CONFIGS_FOLDER + ei.code.toLowerCase() + ".properties");
-		if(file.exists()==false)
-			file.createNewFile();
-		else if(file.isDirectory())
+		if(ei.file.exists()==false)
+			ei.file.createNewFile();
+		else if(ei.file.isDirectory())
 		{
-			System.out.println("Can't save properties for engine "+ei.code+": a folder with the same name exists!");
+			System.out.println("Can't save properties for engine "+ei.code+": a folder with the name "+ei.file.getName()+" already exists!");
 			return;
 		}
-		FileOutputStream fos = new FileOutputStream(file);
+		FileOutputStream fos = new FileOutputStream(ei.file);
 		p.store(fos, "avocadoom engine config v2");
 		fos.close();
 	}
@@ -267,7 +266,7 @@ public class Settings
 	{
 		for(EngineInfo ei : customEngines)
 		{
-			try {
+			if(ei.modified) try {
 				storeEngine(ei);
 			} catch (IOException e) 
 			{
