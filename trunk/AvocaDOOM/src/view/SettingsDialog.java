@@ -31,6 +31,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.JButton;
@@ -86,7 +87,9 @@ public class SettingsDialog extends JDialog implements ActionListener
 	{	
 		super( owner, "Settings", true ); 
 		pathsToSearchForPresets = new Vector<String>(options.pathsToSearchForPresets);
+		pathsToSearchForPresets.remove(0); //removes .
 		pathsToSearchForWads = new Vector<String>(options.pathsToSearchForWads);
+		pathsToSearchForWads.remove(0); //removes .
 		customEngines = new Vector<EngineInfo>(options.customEngines);
 		original = options;
 		
@@ -336,9 +339,13 @@ public class SettingsDialog extends JDialog implements ActionListener
 		//OUTSIDE TAB BUTTONS
 		if(e.getSource().equals(btnApply))
 		{
-			original.pathsToSearchForPresets = pathsToSearchForPresets;
-			original.pathsToSearchForWads = pathsToSearchForWads;
-			original.customEngines = customEngines;
+			List<String> lp = new ArrayList<String>(pathsToSearchForPresets);
+			lp.add(0, ".");
+			original.pathsToSearchForPresets = lp;
+			List<String> lw = new ArrayList<String>(pathsToSearchForWads);
+			lw.add(0, ".");
+			original.pathsToSearchForWads = lw;
+			original.customEngines = new ArrayList<EngineInfo>(customEngines);
 			original.alertIncompEngine = chckbxAlertWhenLaunching.isSelected();
 			original.showAuxConsole = chckbxShowAConsole.isSelected();
 			
