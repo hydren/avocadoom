@@ -1,5 +1,23 @@
 (+ new feature, ~ change, - removal, * fixes)
 
+Changes from 0.9.6 to 1.0
+~Changed settings file structure. Engines are specified in separate files. These files are .properties file, similar to Zandronum config files.
+~Changed preset file structure. An option to convert old presets to new format is available in Settings->Misc.->Choose.
+*Hid annoying dots from preset and mods paths list.
+~Engines are listed in alphabetic order (id).
+*Keeping previous engine selection after working with settings dialog.
++Remembering previously selected engine.
++Now it's possible to change appearance between Java's Look&Feels.
++Added 2 themes in themes folder. Currently it's not possible to change between them inside Avocadoom. You should overwrite the image manually.
+~Cosmetic changes on main window.
+*Minor cosmetic fixes.
+
+Changes from 0.9.5 to 0.9.6
+*Fixed issue with engine selection combo box on main window.
++Added buttons to change the included mod's order in the preset dialog.
++Added option to use OpenGL to render the application. Fix some visual glitches, but it may cause problems on older hardware.
+*Minor cosmetic fixes.
+
 Changes from 0.9.4 to 0.9.5
 + Saving the resizable panels' position.
 ~ Some dialogs now appear in the center instead of the top-left corner.
