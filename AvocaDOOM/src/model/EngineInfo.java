@@ -21,12 +21,22 @@
 package model;
 
 import java.io.File;
+import java.util.Comparator;
 
 public class EngineInfo 
 {
 	public String name, code, executablePath, iconFileName;
 	public boolean modified=false;
 	public File file;
+	
+	public static final
+	Comparator<EngineInfo> COMPARATOR = new Comparator<EngineInfo>() 
+	{
+		@Override
+		public int compare(EngineInfo o1, EngineInfo o2) {
+			return o1.code.compareTo(o2.code);
+		}
+	};
 
 	public EngineInfo(String name, String code, String executablePath, String iconFileName, File file) 
 	{
