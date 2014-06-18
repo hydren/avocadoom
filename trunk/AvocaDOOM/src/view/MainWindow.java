@@ -312,8 +312,13 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 			refreshPresetList();
 			content_jlist.setListData(new Vector<Mod>());
 			
+			EngineInfo previousSelected = (EngineInfo) comboBox.getSelectedItem();
+			
 			comboBox.removeAllItems();
-			for(EngineInfo ei : options.customEngines) comboBox.addItem(ei);
+			for(EngineInfo ei : options.customEngines) 
+				comboBox.addItem(ei);
+			
+			comboBox.setSelectedItem(previousSelected);
 		}
 		
 		else if( arg0.getSource().equals(comboBox) )
