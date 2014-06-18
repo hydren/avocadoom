@@ -55,6 +55,8 @@ import model.Preset;
 import util.UIManager2;
 import controller.Settings;
 
+import javax.swing.JComboBox;
+
 public class SettingsDialog extends JDialog implements ActionListener
 {
 	private static final long serialVersionUID = -5095508074515360521L;
@@ -78,11 +80,11 @@ public class SettingsDialog extends JDialog implements ActionListener
 	private JPanel panel_engines_group;
 	private JPanel panel_engineButtons;
 	private JPanel panel_customEngines;
-	private JCheckBox chckbxUseSystemLook;
 	private JCheckBox chckbxAlertWhenLaunching;
 	private JCheckBox chckbxShowAConsole;
 	private JCheckBox chckbxUseOpenglRender;
 	private JButton btnImportOld;
+	private JComboBox comboBoxAppearance;
 	
 	public SettingsDialog(Settings options, JFrame owner)
 	{	
@@ -106,26 +108,34 @@ public class SettingsDialog extends JDialog implements ActionListener
 		tabbedPane.addTab("General", null, panelSettings, null);
 		panelSettings.setLayout(null);
 		
-		chckbxUseSystemLook = new JCheckBox("Use system's look and feel");
-		chckbxUseSystemLook.setBounds(5, 5, 215, 23);
-		chckbxUseSystemLook.setSelected(options.useOSLF);
-		panelSettings.add(chckbxUseSystemLook);
-		
 		chckbxAlertWhenLaunching = new JCheckBox("Alert when using a preset with a different engine");
-		chckbxAlertWhenLaunching.setBounds(5, 33, 376, 23);
+		chckbxAlertWhenLaunching.setBounds(8, 42, 376, 23);
 		chckbxAlertWhenLaunching.setSelected(options.alertIncompEngine);
 		panelSettings.add(chckbxAlertWhenLaunching);
 		
 		chckbxShowAConsole = new JCheckBox("Show a console window with the engine's executable output");
-		chckbxShowAConsole.setBounds(5, 61, 457, 23);
+		chckbxShowAConsole.setBounds(8, 69, 457, 23);
 		chckbxShowAConsole.setSelected(options.showAuxConsole);
 		panelSettings.add(chckbxShowAConsole);
 		
 		chckbxUseOpenglRender = new JCheckBox("Use OpenGL rendering for Avocadoom (requires restart)");
 		chckbxUseOpenglRender.setToolTipText("Fix some visual glitches but may cause problems on machines with OpenGL older than 1.2");
-		chckbxUseOpenglRender.setBounds(5, 88, 422, 23);
+		chckbxUseOpenglRender.setBounds(8, 96, 422, 23);
 		chckbxUseOpenglRender.setSelected(options.useOGLgui);
 		panelSettings.add(chckbxUseOpenglRender);
+		
+		JPanel panelAppearance = new JPanel();
+		FlowLayout fl_panelAppearance = (FlowLayout) panelAppearance.getLayout();
+		fl_panelAppearance.setAlignment(FlowLayout.LEFT);
+		panelAppearance.setBounds(5, 0, 481, 42);
+		panelSettings.add(panelAppearance);
+		
+		JLabel lblAppearance = new JLabel("Appearance:");
+		panelAppearance.add(lblAppearance);
+		
+		comboBoxAppearance = new JComboBox(new Vector<String>(UIManager2.getInstalledLookAndFeelsNames()));
+		comboBoxAppearance.setSelectedItem(options.appLookAndFeel);
+		panelAppearance.add(comboBoxAppearance);
 		
 		JPanel panelWadPk3 = new JPanel();
 		tabbedPane.addTab("Wads/PK3s", null, panelWadPk3, null);
@@ -350,17 +360,14 @@ public class SettingsDialog extends JDialog implements ActionListener
 			original.alertIncompEngine = chckbxAlertWhenLaunching.isSelected();
 			original.showAuxConsole = chckbxShowAConsole.isSelected();
 			
-			if(original.useOSLF != chckbxUseSystemLook.isSelected())
+			if(original.appLookAndFeel != comboBoxAppearance.getSelectedItem())
 			{
 				try
 				{
-					if(chckbxUseSystemLook.isSelected())
-						UIManager2.setLookAndFeelByName("System");
-					else
-						UIManager2.setLookAndFeel(UIManager2.getCrossPlatformLookAndFeelClassName());
+					UIManager2.setLookAndFeelByName((String) comboBoxAppearance.getSelectedItem());
 
 					SwingUtilities.updateComponentTreeUI(this.getOwner());
-					original.useOSLF = chckbxUseSystemLook.isSelected();
+					original.appLookAndFeel = (String) comboBoxAppearance.getSelectedItem();
 				} 
 				catch(Exception exc)
 				{
