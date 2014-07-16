@@ -168,10 +168,21 @@ public class Preset
 //		if( file.getName().toLowerCase().endsWith(".txt") == false ) return false;
 			
 		Scanner scanner1 = new Scanner(file);
-		if(scanner1.hasNextLine() == false) return false;
+		if(scanner1.hasNextLine() == false)
+		{
+			scanner1.close();
+			scanner1=null;
+			System.gc();
+			return false;
+		}
 		
 		if(scanner1.nextLine().equalsIgnoreCase("#avocadoom preset file v2") == false)
+		{
+			scanner1.close();
+			scanner1=null;
+			System.gc();
 			return false;
+		}
 		
 		scanner1.close();
 		scanner1=null;
@@ -281,9 +292,21 @@ public class Preset
 				scanner1=null;
 				System.gc();
 			}
-			else throw new Exception("Invalid preset file \""+file.getName()+"\"! (at load() method)");	
+			else 
+			{
+				scanner1.close();
+				scanner1=null;
+				System.gc();
+				throw new Exception("Invalid preset file \""+file.getName()+"\"! (at load() method)");	
+			}
 		}
-		else throw new Exception("Empty preset file \""+file.getName()+"\"! (at load() method)");
+		else 
+		{
+			scanner1.close();
+			scanner1=null;
+			System.gc();
+			throw new Exception("Empty preset file \""+file.getName()+"\"! (at load() method)");
+		}
 		
 		return p;
 	}
