@@ -7,7 +7,3 @@ Blog: http://avocadoom-launcher.blogspot.com.br/
 I'll take inspirations from ZDL: http://zdoom.org/wiki/ZDL
 
 
-
-Links to other mirrors and previous versions:
-
-http://avocadoom-launcher.blogspot.com.br/p/files.html
