@@ -58,6 +58,9 @@ public class Settings
 	/** Look & Feel to use on the app's Swing GUI. */
 	public String appLookAndFeel;
 	
+	/** Icon theme to use. */
+	public String iconTheme;
+	
 	// === file parsing static fields
 	
 	public static final String 
@@ -71,6 +74,7 @@ public class Settings
 		SESSION_LASTVISITEDFOLDER="lastvisitedfolder",
 		SESSION_LASTSELECTEDCENGINE="lastselectedengine",
 		SESSION_LOOKANDFEEL="lookandfeel",
+		SESSION_ICONTHEME="icontheme",
 		
 		SESSION_MAXIMIZED="maximized"; //NOT IMPLEMENTED, TODO
 	
@@ -94,6 +98,7 @@ public class Settings
 		customEngines = new ArrayList<EngineInfo>();
 		lastSelectedEngine = null;
 		appLookAndFeel = "system";
+		iconTheme = "doom";
 	}
 	
 	public void load() throws FileNotFoundException, IOException, Exception
@@ -151,6 +156,10 @@ public class Settings
 		tmp=null;
 		if((tmp = p.getProperty(SESSION_LOOKANDFEEL)) != null)
 			appLookAndFeel = tmp;
+		
+		tmp=null;
+		if((tmp = p.getProperty(SESSION_ICONTHEME)) != null)
+			iconTheme = tmp;
 	}
 	
 	public void store() throws FileNotFoundException, IOException
@@ -166,6 +175,7 @@ public class Settings
 		p.setProperty(SESSION_SHOWAUXCONSOLE, showAuxConsole+"");
 		p.setProperty(SESSION_LASTSELECTEDCENGINE, lastSelectedEngine);
 		p.setProperty(SESSION_LOOKANDFEEL, appLookAndFeel);
+		p.setProperty(SESSION_ICONTHEME, iconTheme);
 		FileOutputStream fos = new FileOutputStream(SETTINGS_FILE);
 		p.store(fos, "avocadoom settings v2");
 		fos.close();

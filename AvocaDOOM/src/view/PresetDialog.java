@@ -250,25 +250,25 @@ public class PresetDialog extends JDialog implements ActionListener
 		panelMods.add(lblWadspkIncluded);
 		
 		//buttonInclude = new JButton("=>");
-		buttonInclude = new JButton(new ImageIcon("image/arrow-right.png"));
+		buttonInclude = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/arrow-right.png"));
 		buttonInclude.setToolTipText("Add to preset");
 		buttonInclude.addActionListener(this);
 		buttonInclude.setBounds(266, 79, 57, 25);
 		panelMods.add(buttonInclude);
 		
 		//buttonExclude = new JButton("<=");
-		buttonExclude = new JButton(new ImageIcon("image/arrow-left.png"));
+		buttonExclude = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/arrow-left.png"));
 		buttonExclude.setToolTipText("Remove from preset");
 		buttonExclude.addActionListener(this);
 		buttonExclude.setBounds(266, 219, 57, 25);
 		panelMods.add(buttonExclude);
 		
-		btnUp = new JButton(new ImageIcon("image/arrow-up.png"));
+		btnUp = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/arrow-up.png"));
 		btnUp.setBounds(571, 93, 32, 48);
 		btnUp.addActionListener(this);
 		panelMods.add(btnUp);
 		
-		btnDown = new JButton(new ImageIcon("image/arrow-down.png"));
+		btnDown = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/arrow-down.png"));
 		btnDown.setBounds(571, 163, 32, 48);
 		btnDown.addActionListener(this);
 		panelMods.add(btnDown);

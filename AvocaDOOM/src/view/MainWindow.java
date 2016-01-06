@@ -159,35 +159,35 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		toolBar.setAlignmentX(Component.LEFT_ALIGNMENT);
 		toolBar.setFloatable(false);
 		
-		btnRun = new JButton(new ImageIcon("image/play.png"));
+		btnRun = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/play.png"));
 		btnRun.setToolTipText("Run!");
 		btnRun.addActionListener(this);
 		toolBar.add(btnRun);
 
-		btnCreateNewPreset = new JButton(new ImageIcon("image/create-preset.png"));
+		btnCreateNewPreset = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/create-preset.png"));
 		btnCreateNewPreset.setToolTipText("Create new preset");
 		btnCreateNewPreset.addActionListener(this);
 		toolBar.add(btnCreateNewPreset);
 		
-		btnEditPreset = new JButton(new ImageIcon("image/edit-preset.png"));
+		btnEditPreset = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/edit-preset.png"));
 		btnEditPreset.setToolTipText("Edit preset");
 		btnEditPreset.addActionListener(this);
 		toolBar.add(btnEditPreset);
 		
 		//btnRemovePreset = new JButton("Remove preset");
-		btnRemovePreset = new JButton(new ImageIcon("image/delete-preset.png"));
+		btnRemovePreset = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/delete-preset.png"));
 		btnRemovePreset.setToolTipText("Remove preset");
 		btnRemovePreset.addActionListener(this);
 		toolBar.add(btnRemovePreset);
 		
 		btnSettings = new JButton("Settings");
-		btnSettings = new JButton(new ImageIcon("image/settings.png"));
+		btnSettings = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/settings.png"));
 		btnSettings.setToolTipText("Settings");
 		btnSettings.addActionListener(this);
 		toolBar.add(btnSettings);
 		
 		//btnAbout = new JButton("About");
-		btnAbout = new JButton(new ImageIcon("image/about.png"));
+		btnAbout = new JButton(new ImageIcon("image/themes/"+options.iconTheme+"/about.png"));
 		btnAbout.setToolTipText("About AvocaDOOM");
 		btnAbout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -209,12 +209,12 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 		comboBox.addActionListener(this);
 		
 		lblSelectedEnginePic = new JLabel("");
-		//lblSelectedEnginePic.setIcon( new ImageIcon("image/engine.png") );
+		//lblSelectedEnginePic.setIcon( new ImageIcon("image/themes/"+options.iconTheme+"/engine.png") );
 		if( comboBox.getSelectedIndex() >= 0)
 		{
 			if( ((EngineInfo) comboBox.getSelectedItem()).iconFileName != null && new File(((EngineInfo) comboBox.getSelectedItem()).iconFileName).isFile() )
 			lblSelectedEnginePic.setIcon( new ImageIcon( ((EngineInfo) comboBox.getSelectedItem()).iconFileName ) );
-			else lblSelectedEnginePic.setIcon( new ImageIcon("image/engine.png") );
+			else lblSelectedEnginePic.setIcon( new ImageIcon("image/themes/"+options.iconTheme+"/engine.png") );
 		}
 		
 		toolBar.add(lblSelectedEnginePic);
@@ -347,7 +347,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 			{
 				if( ((EngineInfo) comboBox.getSelectedItem()).iconFileName != null && new File(((EngineInfo) comboBox.getSelectedItem()).iconFileName).isFile() )
 				lblSelectedEnginePic.setIcon( new ImageIcon( ((EngineInfo) comboBox.getSelectedItem()).iconFileName ) );
-				else lblSelectedEnginePic.setIcon( new ImageIcon("image/engine.png") );
+				else lblSelectedEnginePic.setIcon( new ImageIcon("image/themes/"+options.iconTheme+"/engine.png") );
 				options.lastSelectedEngine = ((EngineInfo) comboBox.getSelectedItem()).code;
 			}
 		}
@@ -397,7 +397,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 							label.setToolTipText(ei.name+" - "+ei.executablePath);
 							if( ei.iconFileName != null && new File(ei.iconFileName).isFile() )
 								label.setIcon(new ImageIcon(ei.iconFileName) );
-							else label.setIcon( new ImageIcon("image/engine.png") );
+							else label.setIcon( new ImageIcon("image/themes/"+options.iconTheme+"/engine.png") );
 							
 							panelEngineJLabels.add(label);
 							match=true;
@@ -407,7 +407,7 @@ public class MainWindow implements ActionListener, ListSelectionListener, Window
 					if( ! match )
 					{
 						JLabel label = new JLabel(str+" (UNREGISTERED)");
-						label.setIcon( new ImageIcon("image/unknown.png") );
+						label.setIcon( new ImageIcon("image/themes/"+options.iconTheme+"/unknown.png") );
 						panelEngineJLabels.add(label);
 					}
 				}
