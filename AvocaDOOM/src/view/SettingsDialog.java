@@ -56,6 +56,7 @@ import util.UIManager2;
 import controller.Settings;
 
 import javax.swing.JComboBox;
+import java.awt.Font;
 
 public class SettingsDialog extends JDialog implements ActionListener
 {
@@ -85,6 +86,8 @@ public class SettingsDialog extends JDialog implements ActionListener
 	private JCheckBox chckbxUseOpenglRender;
 	private JButton btnImportOld;
 	private JComboBox comboBoxAppearance;
+	private JComboBox comboBoxIconTheme;
+	private JLabel lblrequiresRestart;
 	
 	public SettingsDialog(Settings options, JFrame owner)
 	{	
@@ -136,6 +139,21 @@ public class SettingsDialog extends JDialog implements ActionListener
 		comboBoxAppearance = new JComboBox(new Vector<String>(UIManager2.getInstalledLookAndFeelsNames()));
 		comboBoxAppearance.setSelectedItem(options.appLookAndFeel);
 		panelAppearance.add(comboBoxAppearance);
+		
+		JLabel lblIconTheme = new JLabel("Icon theme:");
+		lblIconTheme.setBorder(new EmptyBorder(0, 10, 0, 0));
+		panelAppearance.add(lblIconTheme);
+		
+		Vector<String> iconThemeList = new Vector<String>();
+		String[] themeFolders = new File("image/themes").list();
+		if(themeFolders != null) for(String folderName : themeFolders) iconThemeList.add(folderName); 
+		comboBoxIconTheme = new JComboBox(iconThemeList);
+		comboBoxIconTheme.setSelectedItem(options.iconTheme);
+		panelAppearance.add(comboBoxIconTheme);
+		
+		lblrequiresRestart = new JLabel("(Requires restart)");
+		lblrequiresRestart.setFont(new Font("Dialog", Font.ITALIC, 12));
+		panelAppearance.add(lblrequiresRestart);
 		
 		JPanel panelWadPk3 = new JPanel();
 		tabbedPane.addTab("Wads/PK3s", null, panelWadPk3, null);
@@ -373,6 +391,12 @@ public class SettingsDialog extends JDialog implements ActionListener
 				{
 					JOptionPane.showMessageDialog(this, "Error changing theme:" + exc.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
+			}
+			
+			if(original.iconTheme != comboBoxIconTheme.getSelectedItem())
+			{
+				original.iconTheme = (String) comboBoxIconTheme.getSelectedItem();
+				SwingUtilities.updateComponentTreeUI(this.getOwner());
 			}
 			
 			if(original.useOGLgui != chckbxUseOpenglRender.isSelected())
