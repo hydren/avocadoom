@@ -1,5 +1,10 @@
 (+ new feature, ~ change, - removal, * fixes)
 
+Changes from 1.0 to 1.0.1
+*Fixed possible memory leak
++Now its possible to change icon theme from avocadoom. 
++Added sifr icon theme.
+
 Changes from 0.9.6 to 1.0
 ~Changed settings file structure. Engines are specified in separate files. These files are .properties file, similar to Zandronum config files.
 ~Changed preset file structure. An option to convert old presets to new format is available in Settings->Misc.->Choose.
