@@ -37,6 +37,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -50,13 +51,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+import controller.Settings;
 import model.EngineInfo;
 import model.Preset;
 import util.UIManager2;
-import controller.Settings;
-
-import javax.swing.JComboBox;
-import java.awt.Font;
 
 public class SettingsDialog extends JDialog implements ActionListener
 {
@@ -87,7 +85,6 @@ public class SettingsDialog extends JDialog implements ActionListener
 	private JButton btnImportOld;
 	private JComboBox comboBoxAppearance;
 	private JComboBox comboBoxIconTheme;
-	private JLabel lblrequiresRestart;
 	
 	public SettingsDialog(Settings options, JFrame owner)
 	{	
@@ -150,10 +147,6 @@ public class SettingsDialog extends JDialog implements ActionListener
 		comboBoxIconTheme = new JComboBox(iconThemeList);
 		comboBoxIconTheme.setSelectedItem(options.iconTheme);
 		panelAppearance.add(comboBoxIconTheme);
-		
-		lblrequiresRestart = new JLabel("(Requires restart)");
-		lblrequiresRestart.setFont(new Font("Dialog", Font.ITALIC, 12));
-		panelAppearance.add(lblrequiresRestart);
 		
 		JPanel panelWadPk3 = new JPanel();
 		tabbedPane.addTab("Wads/PK3s", null, panelWadPk3, null);
@@ -378,7 +371,7 @@ public class SettingsDialog extends JDialog implements ActionListener
 			original.alertIncompEngine = chckbxAlertWhenLaunching.isSelected();
 			original.showAuxConsole = chckbxShowAConsole.isSelected();
 			
-			if(original.appLookAndFeel != comboBoxAppearance.getSelectedItem())
+			if(original.appLookAndFeel.equals((String) comboBoxAppearance.getSelectedItem()) == false)
 			{
 				try
 				{
@@ -393,10 +386,11 @@ public class SettingsDialog extends JDialog implements ActionListener
 				}
 			}
 			
-			if(original.iconTheme != comboBoxIconTheme.getSelectedItem())
+			if(original.iconTheme.equals((String) comboBoxIconTheme.getSelectedItem()) == false)
 			{
 				original.iconTheme = (String) comboBoxIconTheme.getSelectedItem();
-				SwingUtilities.updateComponentTreeUI(this.getOwner());
+				((JFrame) this.getParent()).dispose();
+				new MainWindow(original);
 			}
 			
 			if(original.useOGLgui != chckbxUseOpenglRender.isSelected())
